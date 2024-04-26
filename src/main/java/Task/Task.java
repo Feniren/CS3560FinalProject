@@ -1,14 +1,16 @@
+package Task;
+
 public class Task{
   String Name;
   String Type;
   int StartTime;
   int Duration;
   
-  Task(){
+  public Task(){
     Name = "Your mom";
     Type = "Idk";
   }
 
-  SetType(String Type){
+  void SetType(String Type){
   }
 }
