@@ -6,6 +6,8 @@ public class Main {
 
     Task task = new Task();
 
+    System.out.println(task.SetDate(20200401));
+
     //task.Print();
   }
 }
