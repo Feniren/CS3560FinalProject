@@ -1,5 +1,6 @@
 package Task;
 
+import java.time.DateTimeException;
 import java.time.format.DateTimeFormatter;
 
 public class Task{
@@ -9,6 +10,17 @@ public class Task{
   float Duration;
   int Date;
 
+  // constructor parameters
+  public Task(String name, String type, float startTime, float duration, int date)
+  {
+    this.Name = name;
+    this.Type = type;
+    this.StartTime = startTime;
+    this.Duration = duration;
+    this.Date = date;
+  }
+
+  // For testing purposes for now
   public Task(){
     Name = "Your mom";
     Type = "Idk";
@@ -16,7 +28,12 @@ public class Task{
     Duration = 0.0f;
     Date = 20240101;
   }
-
+  
+  /**
+   * A function designed to set a date variable for a the Task object.
+   * @param date
+   * @return
+   */
   public boolean SetDate(int date){
     /*String[] DateComponents = new String[3];
 
@@ -50,6 +67,11 @@ public class Task{
     return true;
   }
 
+  /**
+   * 
+   * @param startTime
+   * @return
+   */
   public boolean SetStartTime(float startTime){
     if ((startTime >= 0) && (startTime <= 23.75)){
       StartTime = startTime;
@@ -60,6 +82,11 @@ public class Task{
     return false;
   }
 
+  /**
+   * 
+   * @param duration
+   * @return
+   */
   public boolean SetDuration(float duration){
     if ((duration >= 0.25) && (duration <= 23.75)){
       Duration = duration;
@@ -68,4 +95,7 @@ public class Task{
 
   void SetType(String Type){
   }
+
+  // // testing if this works...
+  // Task testTask = new Task("Your mom", "idk", 0.0f, 0.0f, 20240101);
 }
