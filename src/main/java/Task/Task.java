@@ -1,7 +1,8 @@
 package Task;
 
 import java.time.DateTimeException;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+// import java.time.format.DateTimeFormatter;
 
 public class Task{
   String Name;
@@ -30,47 +31,33 @@ public class Task{
   }
   
   /**
-   * A function designed to set a date variable for a the Task object.
+   * A function designed to set and verify a date variable for a the Task object.
    * @param date
-   * @return
+   * @return true or false based on if the Date is verified to be correct.
    */
   public boolean SetDate(int date){
-    /*String[] DateComponents = new String[3];
-
-    DateComponents[0] = String.valueOf(date).substring(0, 4);
-    DateComponents[1] = String.valueOf(date).substring(4, 6);
-    DateComponents[2] = String.valueOf(date).substring(6, 8);
-
-    if ((Integer.parseInt(DateComponents[1]) < 1) || (Integer.parseInt(DateComponents[1]) > 12)){
-      return false;
-    }
-
-    if ((Integer.parseInt(DateComponents[2]) < 1)){
-      return false;
-    }
-
-    return true;*/
-
+    // Looks to convert date to a string into Year-Month-Day Format and verify
     String DateFormatter;
-    DateTimeFormatter DateValidator;
 
+    // convert date to string an reformat
     DateFormatter = String.valueOf(date);
     DateFormatter = DateFormatter.substring(0, 4) + "-" + DateFormatter.substring(4, 6) + "-" + DateFormatter.substring(6, DateFormatter.length());
 
+    // Verify Date String (Seems to work)
     try{
-      DateValidator.parse(DateFormatter);
+      LocalDate.parse(DateFormatter);
     }
     catch (DateTimeException e){
       return false;
     }
-
+    Date = date;
     return true;
   }
 
   /**
    * 
    * @param startTime
-   * @return
+   * @return true or false based on if 
    */
   public boolean SetStartTime(float startTime){
     if ((startTime >= 0) && (startTime <= 23.75)){
