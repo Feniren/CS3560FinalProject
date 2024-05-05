@@ -1,10 +1,12 @@
 package Task;
 
+import java.beans.Transient;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 // import java.time.format.DateTimeFormatter;
 
-public class Task{
+public class Task
+{
   String Name;
   String Type;
   float StartTime;
@@ -12,8 +14,7 @@ public class Task{
   int Date;
 
   // constructor parameters
-  public Task(String name, String type, float startTime, float duration, int date)
-  {
+  public Task(String name, String type, float startTime, float duration, int date){
     this.Name = name;
     this.Type = type;
     this.StartTime = startTime;
@@ -22,7 +23,7 @@ public class Task{
   }
 
   // For testing purposes for now
-  public Task(){
+  public Task() {
     Name = "Your mom";
     Type = "Idk";
     StartTime = 0.0f;
@@ -35,7 +36,7 @@ public class Task{
    * @param date
    * @return true or false based on if the Date is verified to be correct.
    */
-  public boolean SetDate(int date){
+  public boolean SetDate(int date) {
     // Looks to convert date to a string into Year-Month-Day Format and verify
     String DateFormatter;
 
@@ -44,25 +45,27 @@ public class Task{
     DateFormatter = DateFormatter.substring(0, 4) + "-" + DateFormatter.substring(4, 6) + "-" + DateFormatter.substring(6, DateFormatter.length());
 
     // Verify Date String (Seems to work)
-    try{
+    try
+    {
       LocalDate.parse(DateFormatter);
     }
-    catch (DateTimeException e){
+    catch (DateTimeException e)
+    {
       return false;
     }
+
     Date = date;
     return true;
   }
 
   /**
-   * 
+   * A function that will verify the time and set to the Task Object
    * @param startTime
    * @return true or false based on if 
    */
-  public boolean SetStartTime(float startTime){
-    if ((startTime >= 0) && (startTime <= 23.75)){
+  public boolean SetStartTime(float startTime) {
+    if ((startTime >= 0) && (startTime <= 23.75)) {  
       StartTime = startTime;
-
       return true;
     }
 
@@ -70,17 +73,42 @@ public class Task{
   }
 
   /**
-   * 
+   * A function that will verify the duration and set to the Task object
    * @param duration
-   * @return
    */
-  public boolean SetDuration(float duration){
-    if ((duration >= 0.25) && (duration <= 23.75)){
+  public boolean SetDuration(float duration) {
+    if ((duration >= 0.25) && (duration <= 23.75))
+    {
       Duration = duration;
+      return true;
     }
+
+    return false;
   }
 
-  void SetType(String Type){
+  /**
+   * Sets Task object to a subclass of Task and creates object
+   * @param type
+   */
+  public void SetType(String type)
+  {
+    // Should subclass objects be made here?
+    if (type.equals("Recurring Task"))
+    {
+
+    }
+    else if (type.equals("Anti Task"))
+    {
+
+    }
+    else if (type.equals("Transient Task"))
+    {
+      
+    } 
+    else 
+    {
+      throw new IllegalArgumentException(type);
+    }
   }
 
   // // testing if this works...
