@@ -9,9 +9,9 @@ public class RecurringTask extends Task{
     public RecurringTask(String name, String type, float startTime, float duration, int date, int startDate, int endDate, int frequency)
     {
         super(name, type, startTime, duration, date);
-        this.StartDate = startDate;
-        this.EndDate = endDate;
-        this.Frequency = frequency;
+        StartDate = startDate;
+        EndDate = endDate;
+        Frequency = frequency;
     }
 
     // Testing if this works...
