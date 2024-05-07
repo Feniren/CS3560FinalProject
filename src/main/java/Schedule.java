@@ -17,7 +17,7 @@ public class Schedule {
     // searches the list for a task of a given name
     public Task findTask(String Name) {
         for (Task task: taskList) {
-            if(task.getName().equals(Name)) {
+            if(task.GetName().equals(Name)) {
                 return task;
             }
         }

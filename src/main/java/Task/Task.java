@@ -18,6 +18,10 @@ public class Task{
     Date = 20240101;
   }
 
+  public String GetName(){
+    return Name;
+  }
+
   public float RoundFloat(float number){
     String Number = String.valueOf(number);
     String LeadingNumbers = "";
@@ -42,14 +46,20 @@ public class Task{
 
     DecimalNumbers = Float.parseFloat("0." + TrailingNumbers);
 
-    if (DecimalNumbers < 0.375){
+    if (DecimalNumbers < 0.125f){
+      DecimalNumbers = 0.0f;
+    }
+    else if ((DecimalNumbers >= 0.125f) && (DecimalNumbers < 0.375f)){
       DecimalNumbers = 0.25f;
     }
-    else if ((DecimalNumbers >= 0.375) && (DecimalNumbers < 0.625)){
+    else if ((DecimalNumbers >= 0.375f) && (DecimalNumbers < 0.625f)){
       DecimalNumbers = 0.5f;
     }
-    else{
+    else if ((DecimalNumbers >= 0.625f) && (DecimalNumbers < 0.875f)){
       DecimalNumbers = 0.75f;
+    }
+    else{
+      DecimalNumbers = 1.0f;
     }
 
     return (Float.parseFloat(LeadingNumbers) + DecimalNumbers);

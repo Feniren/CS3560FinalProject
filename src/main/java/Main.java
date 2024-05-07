@@ -7,7 +7,7 @@ public class Main {
     Task task = new Task();
 
     System.out.println(task.SetDate(20200401));
-    System.out.println(task.SetDuration(10.2999999999f));
+    System.out.println(task.SetDuration(10.999999f));
 
     //task.Print();
   }
