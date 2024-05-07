@@ -1,5 +1,6 @@
 package Task;
 
+import java.text.*;
 import java.time.format.DateTimeFormatter;
 
 public class Task{
@@ -15,6 +16,43 @@ public class Task{
     StartTime = 0.0f;
     Duration = 0.0f;
     Date = 20240101;
+  }
+
+  public float RoundFloat(float number){
+    String Number = String.valueOf(number);
+    String LeadingNumbers = "";
+    String TrailingNumbers = "";
+    int DecimalIndex = 0;
+    float DecimalNumbers;
+
+    for (int i = 0; i < Number.length(); i++){
+      if (Number.charAt(i) == '.'){
+        DecimalIndex = i;
+
+        break;
+      }
+      else{
+        LeadingNumbers += String.valueOf(Number.charAt(i));
+      }
+    }
+
+    for (int i = (DecimalIndex + 1); i < Number.length(); i++){
+      TrailingNumbers += String.valueOf(Number.charAt(i));
+    }
+
+    DecimalNumbers = Float.parseFloat("0." + TrailingNumbers);
+
+    if (DecimalNumbers < 0.375){
+      DecimalNumbers = 0.25f;
+    }
+    else if ((DecimalNumbers >= 0.375) && (DecimalNumbers < 0.625)){
+      DecimalNumbers = 0.5f;
+    }
+    else{
+      DecimalNumbers = 0.75f;
+    }
+
+    return (Float.parseFloat(LeadingNumbers) + DecimalNumbers);
   }
 
   public boolean SetDate(int date){
@@ -35,17 +73,21 @@ public class Task{
     return true;*/
 
     String DateFormatter;
-    DateTimeFormatter DateValidator;
+    DateFormat DateValidator = new SimpleDateFormat("yyyy-mm-dd");
 
     DateFormatter = String.valueOf(date);
     DateFormatter = DateFormatter.substring(0, 4) + "-" + DateFormatter.substring(4, 6) + "-" + DateFormatter.substring(6, DateFormatter.length());
 
+    DateValidator.setLenient(false);
+
     try{
       DateValidator.parse(DateFormatter);
     }
-    catch (DateTimeException e){
+    catch (Exception e){
       return false;
     }
+
+    Date = date;
 
     return true;
   }
@@ -62,8 +104,14 @@ public class Task{
 
   public boolean SetDuration(float duration){
     if ((duration >= 0.25) && (duration <= 23.75)){
-      Duration = duration;
+      Duration = RoundFloat(duration);
+
+      System.out.println(Duration);
+
+      return true;
     }
+
+    return false;
   }
 
   void SetType(String Type){
