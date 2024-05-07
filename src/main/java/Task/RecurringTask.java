@@ -17,3 +17,4 @@ public class RecurringTask extends Task{
     // Testing if this works...
     RecurringTask rTask = new RecurringTask("asdf", "recurring task thing", 0.0f, 0.0f, 20240101, 20240101, 20240202, 5);  
 }
+

@@ -1,6 +1,5 @@
 package Task;
 
-import java.beans.Transient;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 // import java.time.format.DateTimeFormatter;
@@ -40,11 +39,11 @@ public class Task
     // Looks to convert date to a string into Year-Month-Day Format and verify
     String DateFormatter;
 
-    // convert date to string an reformat
+    // convert date to string and reformat
     DateFormatter = String.valueOf(date);
     DateFormatter = DateFormatter.substring(0, 4) + "-" + DateFormatter.substring(4, 6) + "-" + DateFormatter.substring(6, DateFormatter.length());
 
-    // Verify Date String (Seems to work)
+    // Verify Date String
     try
     {
       LocalDate.parse(DateFormatter);
@@ -61,7 +60,7 @@ public class Task
   /**
    * A function that will verify the time and set to the Task Object
    * @param startTime
-   * @return true or false based on if 
+   * @return true or false based on if time is valid or not
    */
   public boolean SetStartTime(float startTime) {
     if ((startTime >= 0) && (startTime <= 23.75)) {  
@@ -74,7 +73,8 @@ public class Task
 
   /**
    * A function that will verify the duration and set to the Task object
-   * @param duration
+   * @param duration Length of the task
+   * @return True or False based on if the duration is valid or not
    */
   public boolean SetDuration(float duration) {
     if ((duration >= 0.25) && (duration <= 23.75))
