@@ -8,13 +8,24 @@ public class Schedule {
     int startDate; // beginning point of schedule
     List<Task> taskList; // list of all tasks may be sorted who knows,
 
+    public Schedule(String timeFrame, int startDate, List<Task> taskList) 
+    {
+        this.timeFrame = timeFrame;
+        this.startDate = startDate;
+        this.taskList = taskList;
+    }
+
     public Schedule(){
         timeFrame = "day"; // day, week, month
         startDate = 20240101;
         taskList = new ArrayList<Task>();
     }
 
-    // searches the list for a task of a given name
+    /**
+     * searches the list for a task of a given name
+     * @param Name
+     * @return
+     */
     public Task findTask(String Name) {
         for (Task task: taskList) {
             if(task.GetName().equals(Name)) {
@@ -24,9 +35,13 @@ public class Schedule {
         return null;
     }
 
-    // checks for task conflicts, returns false if no conflicts detected
     // current idea is to have it take a task name and have it check the list for all other task times
-    // may encounter issues 
+    // may encounter issues
+    /**
+     * Checks for task conflicts, returns false if no conflicts detected
+     * @param Name
+     * @return
+     */ 
     public boolean CheckTaskOverlap(String Name){ 
         Task checkTask = findTask(Name);
         for (Task task: taskList) { //iterate through list
@@ -36,7 +51,10 @@ public class Schedule {
         return false;
     }
 
-    // prints out task info
+    /**
+     * prints out task info
+     * @param Name
+     */
     public void ViewTask(String Name) {
         Task task = findTask(Name);
         // needs getters for Task 
@@ -48,8 +66,11 @@ public class Schedule {
         // System.out.println(task.getDate());
     }
 
-    // basic function implemented deletes a function, will need to add checks for potential conflicts in the future
     // a modified checkOverlap may be used for Anti-Tasks to check if more than 1 tasks are overlapping it
+    /**
+     * Basic function implemented deletes a function, will need to add checks for potential conflicts in the future
+     * @param Name
+     */
     public void DeleteTask(String Name) {
         Task task = findTask(Name);
         if(task == null) {
@@ -64,8 +85,11 @@ public class Schedule {
         }
     }
 
-    // implementation, create copy of task being altered, copy is altered and checks for overlap and validity before being added to list
     // if added to list remove original task
+    /**
+     * Implementation, create copy of task being altered, copy is altered and checks for overlap and validity before being added to list
+     * @param Name
+     */
     public void editTask(String Name) {
         Task ogTask = findTask(Name);
         //preemptive delete task for later checks
@@ -79,6 +103,13 @@ public class Schedule {
         
     }
 
+    /**
+     * Create new task object with the given task subclass to be chosen
+     * @param Name
+     * @param classType
+     * @param startTime
+     * @param duration
+     */
     public void createTask(String Name, String classType, int startTime, int duration) {
         // depending on classType more info will be needed
         if(classType == "Transient") {
