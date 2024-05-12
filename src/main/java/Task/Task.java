@@ -1,20 +1,98 @@
 package Task;
 
-import java.time.format.DateTimeFormatter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+// import java.time.format.DateTimeFormatter;
 
-public class Task{
+public class Task
+{
   String Name;
   String Type;
   float StartTime;
   float Duration;
   int Date;
 
-  public Task(){
+  // constructor parameters
+  public Task(String name, String type, float startTime, float duration, int date){
+    this.Name = name;
+    this.Type = type;
+    this.StartTime = startTime;
+    this.Duration = duration;
+    this.Date = date;
+  }
+
+  // For testing purposes for now
+  public Task() {
     Name = "Your mom";
     Type = "Idk";
     StartTime = 0.0f;
     Duration = 0.0f;
     Date = 20240101;
+  }
+
+  public int getDate() {
+    return Date;
+  }
+
+  public float getDuration() {
+    return Duration;
+  }
+
+  public float getStartTime() {
+    return StartTime;
+  }
+
+  public String getType() {
+    return Type;
+  }
+  
+    public String getName(){
+    return Name;
+  }
+
+  public float RoundFloat(float number){
+    String Number = String.valueOf(number);
+    String LeadingNumbers = "";
+    String TrailingNumbers = "";
+    int DecimalIndex = 0;
+    float DecimalNumbers;
+
+    for (int i = 0; i < Number.length(); i++){
+      if (Number.charAt(i) == '.'){
+        DecimalIndex = i;
+
+        break;
+      }
+      else{
+        LeadingNumbers += String.valueOf(Number.charAt(i));
+      }
+    }
+
+    for (int i = (DecimalIndex + 1); i < Number.length(); i++){
+      TrailingNumbers += String.valueOf(Number.charAt(i));
+    }
+
+    DecimalNumbers = Float.parseFloat("0." + TrailingNumbers);
+
+    if (DecimalNumbers < 0.125f){
+      DecimalNumbers = 0.0f;
+    }
+    else if ((DecimalNumbers >= 0.125f) && (DecimalNumbers < 0.375f)){
+      DecimalNumbers = 0.25f;
+    }
+    else if ((DecimalNumbers >= 0.375f) && (DecimalNumbers < 0.625f)){
+      DecimalNumbers = 0.5f;
+    }
+    else if ((DecimalNumbers >= 0.625f) && (DecimalNumbers < 0.875f)){
+      DecimalNumbers = 0.75f;
+    }
+    else{
+      DecimalNumbers = 1.0f;
+    }
+
+    return (Float.parseFloat(LeadingNumbers) + DecimalNumbers);
   }
 
   public boolean SetDate(int date){
@@ -35,17 +113,21 @@ public class Task{
     return true;*/
 
     String DateFormatter;
-    DateTimeFormatter DateValidator;
+    DateFormat DateValidator = new SimpleDateFormat("yyyy-mm-dd");
 
     DateFormatter = String.valueOf(date);
     DateFormatter = DateFormatter.substring(0, 4) + "-" + DateFormatter.substring(4, 6) + "-" + DateFormatter.substring(6, DateFormatter.length());
 
+    DateValidator.setLenient(false);
+
     try{
       DateValidator.parse(DateFormatter);
     }
-    catch (DateTimeException e){
+    catch (Exception e){
       return false;
     }
+
+    Date = date;
 
     return true;
   }
@@ -62,8 +144,14 @@ public class Task{
 
   public boolean SetDuration(float duration){
     if ((duration >= 0.25) && (duration <= 23.75)){
-      Duration = duration;
+      Duration = RoundFloat(duration);
+
+      System.out.println(Duration);
+
+      return true;
     }
+
+    return false;
   }
 
   void SetType(String Type){
