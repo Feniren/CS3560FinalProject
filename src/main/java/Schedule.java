@@ -21,11 +21,22 @@ public class Schedule
 
     // Testing purposes
     public Schedule(){
-        timeFrame = "day"; // day, week, month
-        startDate = 20240101;
-        taskList = new ArrayList<Task>();
+        this.timeFrame = "day"; // day, week, month
+        this.startDate = 20240101;
+        this.taskList = new ArrayList<Task>();
     }
 
+	public String getTimeFrame(){
+        return this.timeFrame;
+    }
+
+    public int getStartDate(){
+        return this.startDate;
+    }
+
+    public List<Task> getTaskList(){
+        return this.taskList;
+    }
 
     // completed
     /**
@@ -205,7 +216,7 @@ public class Schedule
      * @param classType
      * @return
      */
-    public String categorizeTask(String classType) {
+    public static String categorizeTask(String classType) {
         String taskType = "";
         switch(classType){
             case "Visit": case "Shopping": case "Appointment":
