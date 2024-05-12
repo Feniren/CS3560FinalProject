@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.*;
-import org.json.*;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 public class PSS {
     public static void readToFile(){
         try{
