@@ -5,6 +5,7 @@ import org.json.simple.parser.JSONParser;
 
 public class PSS {
     public static void readToFile(){
+        JSONParser parser = new JSONParser();
         try{
 
         }
