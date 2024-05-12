@@ -1,16 +1,30 @@
 package Task;
 
-import java.text.*;
-import java.time.format.DateTimeFormatter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+// import java.time.format.DateTimeFormatter;
 
-public class Task{
+public class Task
+{
   String Name;
   String Type;
   float StartTime;
   float Duration;
   int Date;
 
-  public Task(){
+  // constructor parameters
+  public Task(String name, String type, float startTime, float duration, int date){
+    this.Name = name;
+    this.Type = type;
+    this.StartTime = startTime;
+    this.Duration = duration;
+    this.Date = date;
+  }
+
+  // For testing purposes for now
+  public Task() {
     Name = "Your mom";
     Type = "Idk";
     StartTime = 0.0f;
@@ -18,7 +32,23 @@ public class Task{
     Date = 20240101;
   }
 
-  public String GetName(){
+  public int getDate() {
+    return Date;
+  }
+
+  public float getDuration() {
+    return Duration;
+  }
+
+  public float getStartTime() {
+    return StartTime;
+  }
+
+  public String getType() {
+    return Type;
+  }
+  
+    public String getName(){
     return Name;
   }
 
