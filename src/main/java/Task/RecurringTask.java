@@ -14,6 +14,18 @@ public class RecurringTask extends Task{
         Frequency = frequency;
     }
 
+    public int setEndDate(int endDate) {
+        return EndDate = endDate;
+    }
+
+    public int setStartDate(int startDate) {
+        return StartDate = startDate;
+    }
+
+    public int setFrequency(int frequency) {
+        return Frequency = frequency;
+    }
+
     public int getEndDate() {
         return EndDate;
     }

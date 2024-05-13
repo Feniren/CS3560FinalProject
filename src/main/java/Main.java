@@ -11,14 +11,30 @@ public class Main {
     // System.out.println(task.SetDuration(10.999999f));
 
     // test for transient overlap detected
-    // testSchedule.createTask("asdf", "Meal", 0.0f, 0.0f, 20240101, 20240101, 20240202, 1); //Recurring Task
+    testSchedule.createTask("asdf", "Meal", 0.0f, 0.15f, 20240101, 20240101, 20240202, 1); //Recurring Task
 
     // testSchedule.ViewTask("asdf");
 
-    testSchedule.createTask("Your mom", "Visit", 0.0f, 0.0f, 20240101, 20240102); //Transient Test
-      
-    testSchedule.ViewTask("Your mom"); // found overlap and deleted
+    testSchedule.createTask("mimis1", "Cancellation", 0.0f, 0.15f, 20240101); //antitask
 
-    testSchedule.createTask("Your mom", "Visit", 0.0f, 0.0f, 20240101, 20240102); //Transient Test
+    testSchedule.createTask("mimis2", "Cancellation", 0.0f, 0.15f, 20240501); //antitask
+
+    testSchedule.createTask("Your mom", "Visit", 0.0f, 0.0f, 20240303); //Transient Test
+
+    testSchedule.DeleteTask("asdf");
+
+    testSchedule.DeleteTask("mimis1");
+      
+    //testSchedule.viewTask("Your mom"); // found overlap and deleted
+
+    //testSchedule.createTask("Your mom", "Visit", 0.0f, 0.0f, 20240101); //Transient Test
+
+    testSchedule.printList(); //before your mom deletion
+
+    //testSchedule.editTask("Your mom", "test", "Sleep", 1.15f, 0.30f, 20250101, 20250201, 7);
+    
+    //testSchedule.printList(); // after
+
+    
   }
 }

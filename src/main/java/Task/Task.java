@@ -32,6 +32,31 @@ public class Task
     Date = 20240101;
   }
 
+  public float setDuration(float duration) {
+    Duration = duration;
+    return Duration;
+  }
+
+  public float setStartTime(float startTime) {
+    StartTime = startTime;
+    return StartTime;
+  }
+
+  public String setType(String type) {
+    Type = type;
+    return Type;
+  }
+
+  public String setName(String name) {
+    Name = name;
+    return Name;
+  }
+
+  public int setDate(int date) {
+    Date = date;
+    return Date;
+  }
+
   public int getDate() {
     return Date;
   }
