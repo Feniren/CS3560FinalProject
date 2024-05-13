@@ -10,12 +10,15 @@ public class Main {
     // System.out.println(task.SetDate(20200401));
     // System.out.println(task.SetDuration(10.999999f));
 
-    testSchedule.createTask("asdf", "Meal", 0.0f, 0.0f, 20240101, 20240101, 20240202, 5); //Recurring Task
+    // test for transient overlap detected
+    // testSchedule.createTask("asdf", "Meal", 0.0f, 0.0f, 20240101, 20240101, 20240202, 1); //Recurring Task
 
-    testSchedule.ViewTask("asdf");
+    // testSchedule.ViewTask("asdf");
 
     testSchedule.createTask("Your mom", "Visit", 0.0f, 0.0f, 20240101, 20240102); //Transient Test
       
-    testSchedule.ViewTask("Your mom");
+    testSchedule.ViewTask("Your mom"); // found overlap and deleted
+
+    testSchedule.createTask("Your mom", "Visit", 0.0f, 0.0f, 20240101, 20240102); //Transient Test
   }
 }
