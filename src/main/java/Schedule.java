@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Scanner;
+
 import Task.AntiTask;
 import Task.RecurringTask;
 import Task.Task;
@@ -26,6 +28,9 @@ public class Schedule
         taskList = new ArrayList<Task>();
     }
 
+    /**
+     * Prints the list of all current tasks
+     */
     public void printList() {
         System.out.println("Printing Task List: ");
         for (Task task : taskList) {
@@ -33,11 +38,9 @@ public class Schedule
         }
     }
 
-
-    // completed
     /**
      * searches the list for a task of a given name
-     * @param Name
+     * @param Name Task name to be searched
      * @return task, null, Result is based if a task is found or not
      */
     public Task findTask(String Name) {
@@ -51,11 +54,16 @@ public class Schedule
 
     // current idea is to have it take a task name and have it check the list for all other task times
     // may encounter issues
+    // Should try to simplify this in the future
 
+    /**
+     * Checks a new task's time and date to see if it overlaps with any current tasks
+     * @param name Name of task to be checked
+     * @return True or False if Task overlaps or does not respectively
+     */
     public boolean checkTaskOverlap(String name) {
-        Task taskToCheck = findTask(name); // can leave like as long as we dont call methods exclusive to a subclass according to stackoverflow
-        if (taskToCheck == null) { // checks if task exists // prints prematurely should either remove or provide another check
-            System.out.println("Error: Task Not Found");
+        Task taskToCheck = findTask(name); 
+        if (taskToCheck == null) { // checks if task exists, removal of this breaks function
             return false;
         }
 
@@ -162,7 +170,7 @@ public class Schedule
                         continue;
                     }
                 }                            
-                System.out.println("completed check");
+                // System.out.println("completed check");
                 break;
             default:
                 System.out.println("Error: Invalid Task Type");
@@ -171,146 +179,117 @@ public class Schedule
         return flag;
     }
 
-    private boolean checkAntiToAntiOverlap(AntiTask checkATask, AntiTask antiTask) {
-        float antiEndTime = antiTask.getStartTime() + antiTask.getDuration() + 0.5f;
-        float antiStartTime = antiTask.getStartTime() - 0.25f; 
-        float checkingEndTask = checkATask.getStartTime() + checkATask.getDuration() + 0.5f;
-        float checkingStartTask = checkATask.getStartTime() - 0.25f;
-        if ((antiStartTime >= checkingStartTask && antiStartTime < checkingEndTask) ||
-        (antiEndTime > checkingStartTask && antiEndTime <= checkingEndTask) ||
-        (antiStartTime <= checkingStartTask && antiEndTime >= checkingEndTask)) {
-            System.out.println("overlap seen, checkAntiToAntiOverlap function");
-            return true; // overlap is seen
-        }
-        return false;
-    }
+    // main check overlap function for the other functions
+    /**
+     * The general checkOverlap Function for checking overlap each Task Type
+     * @param taskStartTime Beginning time of a task
+     * @param taskDuration Length of task
+     * @param checkingStartTime Beginning time of comparison Task
+     * @param checkingEndTime Ending Time of comparison Task
+     * @return True if overlap is found, false otherwise
+     */
+    private boolean checkOverlap(float taskStartTime, float taskDuration, float checkingStartTime, float checkingEndTime) {
+        float taskEndTime = taskStartTime + taskDuration + 0.5f;
+        float startTime = taskStartTime - 0.25f;
     
-    private boolean checkTranstoTransOverlap(TransientTask checkTTask, TransientTask transientTask) {
-        float transEndTime = transientTask.getStartTime() + transientTask.getDuration() + 0.5f;
-        float transStartTime = transientTask.getStartTime() - 0.25f; 
-        float checkingEndTask = checkTTask.getStartTime() + checkTTask.getDuration() + 0.5f;
-        float checkingStartTask = checkTTask.getStartTime() - 0.25f;
-        if ((transStartTime >= checkingStartTask && transStartTime < checkingEndTask) ||
-            (transEndTime > checkingStartTask && transEndTime <= checkingEndTask) ||
-            (transStartTime <= checkingStartTask && transEndTime >= checkingEndTask)) {
-                System.out.println("overlap seen, checkTranstoTranbsOverlap function");
-                return true; // overlap is seen
-            }
-        return false;
-    }
-
-    private boolean checkRectoRecOverlap(RecurringTask checkRTask, RecurringTask recurringTask) {
-        float recEndTime = recurringTask.getStartTime() + recurringTask.getDuration() + 0.5f;
-        float recStartTime = recurringTask.getStartTime() - 0.25f; 
-        float checkingEndTask = checkRTask.getStartTime() + checkRTask.getDuration() + 0.5f;
-        float checkingStartTask = checkRTask.getStartTime() - 0.25f;
-        if(checkRTask.getStartDate() >= recurringTask.getStartDate() && checkRTask.getStartDate() <= recurringTask.getEndDate() ||
-            checkRTask.getEndDate() >= recurringTask.getStartDate() && checkRTask.getEndDate() <= recurringTask.getEndDate()) { //within date range
-            // if daily to daily
-            if(checkRTask.getFrequency() == recurringTask.getFrequency() && checkRTask.getFrequency() == 1) {
-                if ((recStartTime >= checkingStartTask && recStartTime < checkingEndTask) ||
-                (recEndTime > checkingStartTask && recEndTime <= checkingEndTask) ||
-                (recStartTime <= checkingStartTask && recEndTime >= checkingEndTask)) {
-                    System.out.println("overlap seen, checkTranstoTranbsOverlap function");
-                return true; // overlap is seen
-            }
-            
-            // if weekly to daily
-            } else if(checkRTask.getFrequency() != recurringTask.getFrequency()) {
-                if((recStartTime >= checkingStartTask && recStartTime < checkingEndTask) ||
-                (recEndTime > checkingStartTask && recEndTime <= checkingEndTask) ||
-                (recStartTime <= checkingStartTask && recEndTime >= checkingEndTask)) {
-                    return true;
-                }
-            // if weekly to weekly
-            } else if (checkRTask.getFrequency() == recurringTask.getFrequency() && checkRTask.getFrequency() == 7) {
-                if((recStartTime >= checkingStartTask && recStartTime < checkingEndTask) ||
-                (recEndTime > checkingStartTask && recEndTime <= checkingEndTask) ||
-                (recStartTime <= checkingStartTask && recEndTime >= checkingEndTask)) {
-                    return true;
-                }
-            }
+        if ((startTime >= checkingStartTime && startTime < checkingEndTime) ||
+            (taskEndTime > checkingStartTime && taskEndTime <= checkingEndTime) ||
+            (startTime <= checkingStartTime && taskEndTime >= checkingEndTime)) {
             return true;
         }
         return false;
     }
 
-    // should hopefully function
-    // trans vs recurring
+    // Simplified functions, should hopefully work
+    /**
+     * Prepares variables to check overlap between Anti Tasks
+     * @param checkATask The new task that is being checked
+     * @param antiTask Task from list categorized as Anti Task
+     * @return Call checkOverlap function for variables
+     */
+    private boolean checkAntiToAntiOverlap(AntiTask checkATask, AntiTask antiTask) {
+        // float antiStartTime = antiTask.getStartTime();
+        // float checkingStartTime = checkATask.getStartTime();
+        float checkingEndTime = checkATask.getStartTime() + checkATask.getDuration() + 0.5f;
+    
+        return checkOverlap(antiTask.getStartTime(), antiTask.getDuration(), checkATask.getStartTime(), checkingEndTime);
+    }
+    /**
+     * Prepares variables to check overlap between Transient Tasks
+     * @param checkTTask The new task that is being checked
+     * @param transientTask Task from list categorized as Transient Task
+     * @return Call checkOverlap function for variables
+     */
+    private boolean checkTranstoTransOverlap(TransientTask checkTTask, TransientTask transientTask) {
+        // float transStartTime = transientTask.getStartTime();
+        // float checkingStartTime = checkTTask.getStartTime();
+        float checkingEndTime = checkTTask.getStartTime() + checkTTask.getDuration() + 0.5f;
+    
+        return checkOverlap(transientTask.getStartTime(), transientTask.getDuration(), checkTTask.getStartTime(), checkingEndTime);
+    }
+
+    /**
+     * Prepares variables to check overlap between Recurrent Tasks
+     * @param checkRTask The new task that is being checked
+     * @param recurringTask Task from list categorized as Recurrent Task
+     * @return Call checkOverlap function for variables
+     */
+    private boolean checkRectoRecOverlap(RecurringTask checkRTask, RecurringTask recurringTask) {
+        // float recurringStartTime = recurringTask.getStartTime();
+        // float checkingStartTime = checkRTask.getStartTime();
+        float checkingEndTime = checkRTask.getStartTime() + checkRTask.getDuration() + 0.5f;
+
+        return checkOverlap(recurringTask.getStartTime(), recurringTask.getDuration(), checkRTask.getStartTime(), checkingEndTime);
+    }
+
+    /**
+     * Prepares variables to check overlap between Recurring and Transient Tasks
+     * @param transientTask Transient Task to be checked with Recurrent
+     * @param recurringTask Recurring Task to be checked with Transient
+     * @return Call checkOverlap function for variables, false otherwise
+     */
     private boolean checkRecurringOverlap(TransientTask transientTask, RecurringTask recurringTask) {
-        int recurringEndDate = recurringTask.getEndDate();
-        int recurringStartDate = recurringTask.getStartDate();
-        float recurringStartTime = recurringTask.getStartTime();
-        float recurringEndTime = recurringTask.getStartTime() + recurringTask.getDuration(); 
-        float transEndTime = transientTask.getStartTime() + transientTask.getDuration() + 0.5f;
-        float transStartTime = transientTask.getStartTime() - 0.25f; 
-
-        if (recurringTask.getFrequency() == 1) { // daily
-            if(transientTask.getDate() <= recurringEndDate && transientTask.getDate() >= recurringStartDate) {
-                if ((transStartTime >= recurringStartTime && transStartTime < recurringEndTime) ||
-                (transEndTime > recurringStartTime && transEndTime <= recurringEndTime) ||
-                (transStartTime <= recurringStartTime && transEndTime >= recurringEndTime)) {
-                    return true; // overlap is seen
-                }
-            }
-        } else if (recurringTask.getFrequency() == 7) { // weekly
-            if ((transStartTime >= recurringStartTime && transStartTime < recurringEndTime) ||
-            (transEndTime > recurringStartTime && transEndTime <= recurringEndTime) ||
-            (transStartTime <= recurringStartTime && transEndTime >= recurringEndTime)) {
-                return true; // overlap is seen
-            }
+        if (transientTask.getDate() >= recurringTask.getStartDate() && 
+        transientTask.getDate() <= recurringTask.getEndDate()) {
+            return checkOverlap(transientTask.getStartTime(), transientTask.getDuration(), 
+            recurringTask.getStartTime(), recurringTask.getDuration());
         }
         return false;
     }
 
-    // Transient vs anti
+    /**
+     * Prepares variables to check overlap between Anti and Transient Tasks
+     * @param antiTask Anti Task to check with Transient
+     * @param transientTask Transient Task to be checked with Anti
+     * @return Call checkOverlap function for variables, false otherwise
+     */
     private boolean checkAntiOverlap(AntiTask antiTask, TransientTask transientTask) {
-        
-        if(antiTask.getDate() == transientTask.getDate()) {//same date
-            if (antiTask.getStartTime() >= transientTask.getStartTime() - 0.25f && 
-                antiTask.getStartTime() <= transientTask.getStartTime() + transientTask.getDuration() + 0.5f) { //start time greater than or equal to start time but less than duration
-                return true;
-            } else if (antiTask.getStartTime() + antiTask.getDuration() <= transientTask.getStartTime() + transientTask.getDuration() + 0.5f &&
-                    antiTask.getStartTime() + antiTask.getDuration() >= transientTask.getStartTime() - 0.25f){ //end time within timeframe of task
-                return true;
-            }
+        if (antiTask.getDate() == transientTask.getDate()) {
+            return checkOverlap(antiTask.getStartTime(), antiTask.getDuration(),
+            transientTask.getStartTime(), transientTask.getDuration());
         }
-
         return false;
     }
 
-    // anti vs recurring
+    /**
+     * Prepares variables to check overlap between Anti and Recurrent Tasks
+     * @param antiTask Anti Task to check with Recurrent
+     * @param recurringTask Recurrent Task to be checked with Anti
+     * @return Call checkOverlap function for variables, false otherwise
+     */
     private boolean checkAntiRecurringOverlap(AntiTask antiTask, RecurringTask recurringTask) {
-        int recurringEndDate = recurringTask.getEndDate();
-        int recurringStartDate = recurringTask.getStartDate();
-        float recurringStartTime = recurringTask.getStartTime();
-        float recurringEndTime = recurringTask.getStartTime() + recurringTask.getDuration(); 
-        float antiEndTime = antiTask.getStartTime() + antiTask.getDuration() + 0.5f;
-        float antiStartTime = antiTask.getStartTime() - 0.25f; 
-
-        if (recurringTask.getFrequency() == 1) { // daily
-            if(antiTask.getDate() <= recurringEndDate && antiTask.getDate() >= recurringStartDate) { 
-                if ((antiStartTime >= recurringStartTime && antiStartTime < recurringEndTime) ||
-                (antiEndTime > recurringStartTime && antiEndTime <= recurringEndTime) ||
-                (antiStartTime <= recurringStartTime && antiEndTime >= recurringEndTime)) {
-                    System.out.println("Testing testing");
-                    return true; // overlap is seen
-                }
-            }
-        } else if (recurringTask.getFrequency() == 7) { // weekly
-            if ((antiStartTime >= recurringStartTime && antiStartTime < recurringEndTime) ||
-            (antiEndTime > recurringStartTime && antiEndTime <= recurringEndTime) ||
-            (antiStartTime <= recurringStartTime && antiEndTime >= recurringEndTime)) {
-                return true; // overlap is seen
-            }
+        if (antiTask.getDate() >= recurringTask.getStartDate() && 
+        antiTask.getDate() <= recurringTask.getEndDate()) {
+            return checkOverlap(antiTask.getStartTime(), antiTask.getDuration(),
+            recurringTask.getStartTime(), recurringTask.getDuration());
         }
         return false;
     }
 
-    // completed
+
     /**
      * prints out task info
-     * @param Name
+     * @param Name The name of task to be viewed and printed
      */
     public void viewTask(String Name) {
         Task task = findTask(Name);
@@ -340,8 +319,8 @@ public class Schedule
     // a modified checkOverlap may be used for Anti-Tasks to check if more than 1 tasks are overlapping it
     // if anti task, cannot delete it, if recurring task has anti task cannot delete, can easily delete transient
     /**
-     * Basic function implemented deletes a function, will need to add checks for potential conflicts in the future
-     * @param Name
+     * Deletes Task unless it conflicts with a rule
+     * @param Name Name of chosen task to delete
      */
     public void DeleteTask(String Name) {
         Task task = findTask(Name);
@@ -379,94 +358,131 @@ public class Schedule
         }
     }
 
-    // if added to list remove original task
-    /**
-     * Implementation, create copy of task being altered, copy is altered and checks for overlap and validity before being added to list
-     * @param Name
-     */
+    // function does not have proper checks yet
+    public void editTask(String chosenName, Task ogTask, Scanner input) {
+        boolean mainLoop = true;
+        categorizeTask(chosenName);
 
-    /*
-     * Current plan, make new menu thats asks for what individual changes
-     */
-    public void editTask(String Name, String newName, String newClassType, float newStartTime, float newDuration, int newDate, Object... additionalArgs) {
-        Task ogTask = findTask(Name);
-        if (ogTask == null) {
-            System.out.println("Task not found");
-            return;
-        }
-        System.out.println("This is the current information of " + Name);
-        viewTask(Name);
+        String taskName = ogTask.getName();
+        String classType = ogTask.getType();
+        float startTime = ogTask.getStartTime();
+        float duration = ogTask.getDuration();
+        int date = ogTask.getDate();
 
-        Task tempTask = ogTask;
-
-        
-        switch(categorizeTask(newClassType)) {
-            case "transient":
-                TransientTask transTask = (TransientTask) ogTask;
-                DeleteTask(Name); // preemptive deletion of task
-                transTask.setDate(newDate);
-                transTask.setName(newName);
-                transTask.setStartTime(newStartTime);
-                transTask.setDuration(newDuration);
-                transTask.setType(newClassType);
-                if(checkTaskOverlap(newName)) {
-                    System.out.println("Overlap Seen");
-                    DeleteTask(newName);
-                    
-                    return;
-                }
-                break;
-            case "recurring": //this scares me...
-                int endDate = (int) additionalArgs[0];
-                int frequency = (int) additionalArgs[1];
-                if(frequency != 1 || frequency != 7) {
-                    System.out.println("Invalid frequency: " + frequency);
-                    return;
-                }
-                RecurringTask recTask = (RecurringTask) ogTask;
-                DeleteTask(Name); // preemptive deletion of task
-                recTask.setDate(newDate);
-                recTask.setStartDate(newDate);
-                recTask.setName(newName);
-                recTask.setStartTime(newStartTime);
-                recTask.setDuration(newDuration);
-                recTask.setType(newClassType);
-                recTask.setEndDate(endDate);
-                recTask.setFrequency(frequency);
-                if(checkTaskOverlap(newName)) {
-                    System.out.println("Overlap Seen");
-                    DeleteTask(newName);
-                    return;
-                }
-                break;
-            case "anti":
-                AntiTask antiTask = (AntiTask) ogTask;
-                DeleteTask(Name); // preemptive deletion of task
-                // createTask("cfunt", "Sleep", 1.15f, 0.30f, 20250101, 20250201, 7);
-                antiTask.setDate(newDate);
-                antiTask.setName(newName);
-                antiTask.setStartTime(newStartTime);
-                antiTask.setDuration(newDuration);
-                antiTask.setType(newClassType);
-                if(checkTaskOverlap(newName)) {
-                    System.out.println("Overlap Seen");
-                    DeleteTask(newName);
-                    return;
-                }
-                break;
+        // default value if there is no recurring
+        int endDate = 0;
+        int frequency = 0;
+        if (ogTask instanceof RecurringTask) {
+            endDate = ((RecurringTask) ogTask).getEndDate();
+            frequency = ((RecurringTask) ogTask).getFrequency();
         }
 
-        System.out.println("This is the current information of " + newName);
-        viewTask(newName);
-        // implementation should allow for multiple values to change, perhaps values that the user doesnt want to change should take a flag val
-        
+        //plan to use createTask option to create a ne task and delete old task
+
+        int choice;
+        while (mainLoop) {
+            System.out.println("Edit Options: ");
+            System.out.println("1) Change Task Name");
+            System.out.println("2) Change Task Type");
+            System.out.println("3) Change Task Start Time");
+            System.out.println("4) Change Task Duration");
+            System.out.println("5) Change Task Date");
+            System.out.println("6) Change End Date");
+            System.out.println("7) Change Frequency");
+            System.out.println("8) Finalize Changes");
+            System.out.println("9) Cancel Edit");
+
+            choice = input.nextInt();
+            input.nextLine();
+
+            switch(choice) {
+                case 1: 
+                    System.out.println("Enter new Name: ");
+                    taskName = input.nextLine();
+                    break;
+                case 2: 
+                    System.out.println("Enter new Type: ");
+                    classType = input.nextLine();
+                    break;
+                case 3:
+                    System.out.println("Enter new Start Time: ");
+                    startTime = input.nextFloat();
+                    break;
+                case 4:
+                    System.out.println("Enter new Duration: ");
+                    duration = input.nextFloat();
+                    break;
+                case 5:
+                    System.out.println("Enter new Date: ");
+                    date = input.nextInt();
+                    break;
+                case 6:
+                    System.out.println("Enter new End Date: ");
+                    endDate = input.nextInt();
+                case 7:
+                    System.out.println("Enter new Frequency (1, 7, or 0): ");
+                    frequency = input.nextInt();
+                    break;
+                case 8: 
+                    if (frequency == 0) {
+                        createTask(taskName, classType, startTime, duration, date);
+                    } else {
+                        createTask(taskName, classType, startTime, duration, date, endDate, date, frequency);
+                    }
+                    mainLoop = false;
+                    break;
+                case 9:
+                    System.out.println("Edit Cancelled");
+                    mainLoop = false;
+                    break;
+                default:
+                    System.out.println("Invalid Option");
+                    break;
+            }
+        }
     }
 
-    // completed
+    public void editTaskMenu() {
+        Scanner input = new Scanner(System.in);
+        boolean mainLoop = true;
+    
+        int choice;
+        while (mainLoop) {
+            System.out.println("Edit Task Menu");
+            System.out.println("1) Choose Task");
+            System.out.println("2) Cancel Edit");
+    
+            choice = input.nextInt();
+            input.nextLine();
+    
+            switch (choice) {
+                case 1:
+                    System.out.println("Please Enter the Task to be Edited: ");
+                    String chosenName = input.nextLine();
+                    Task ogTask = findTask(chosenName);
+                    if (ogTask != null) {
+                        System.out.println("You have chosen to edit: " + chosenName);
+                        editTask(chosenName, ogTask, input); // Call the editTask function
+                    } else {
+                        System.out.println("Task not found.");
+                    }
+                    break;
+                case 2:
+                    System.out.println("Edit Option Cancelled");
+                    mainLoop = false; // exit loop
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+            }
+        }
+        input.close();
+    }
+
     /**
-     * 
-     * @param classType
-     * @return
+     * Categorizes task based on the type of class that is associated with Transient, Recurrent, and Anti
+     * @param classType The Task type associated with a task class
+     * @return taskType, Returns task type as Transient, Recurrent, or Anti
      */
     public String categorizeTask(String classType) {
         String taskType = "";
@@ -486,7 +502,7 @@ public class Schedule
         return taskType;
     }
 
-    // partly finished, needs checks for overlap, cannot lower case the class types, must be captilized properly
+    // cannot lower case the class types, must be captilized properly? completed?
     /**
      * Create new task object with the given task subclass to be chosen
      * @param Name
@@ -558,7 +574,6 @@ public class Schedule
                     System.out.println("Invalid task type");
                 }
         }
-
         return newTask;
     }
 

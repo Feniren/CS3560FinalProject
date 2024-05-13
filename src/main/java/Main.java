@@ -21,7 +21,7 @@ public class Main {
 
     testSchedule.createTask("Your mom", "Visit", 0.0f, 0.0f, 20240303); //Transient Test
 
-    testSchedule.DeleteTask("asdf");
+    // testSchedule.DeleteTask("asdf");
 
     testSchedule.DeleteTask("mimis1");
       
@@ -35,6 +35,44 @@ public class Main {
     
     //testSchedule.printList(); // after
 
-    
+    testSchedule.editTaskMenu();
+
+    testSchedule.printList();
   }
 }
+
+/*
+ * Edit Task Menu
+1) Choose Task
+2) Cancel Edit
+2
+Edit Option Cancelled
+Printing Task List:
+====================================
+Task Name: asdf
+Task Type: Meal
+Task Start Time: 0.0
+Task Duration: 0.15
+Task Date: 20240101
+Task End Date: 20240202
+Task Start Date: 20240101
+Task Frequency: 1
+====================================
+====================================
+Task Name: Your mom
+Task Type: Visit
+Task Start Time: 0.0
+Task Duration: 0.0
+Task Date: 20240303
+====================================
+====================================
+Task Name: test
+Task Type: Sleep
+Task Start Time: 0.0
+Task Duration: 0.15
+Task Date: 20240101
+Task End Date: 20240101
+Task Start Date: 20240202
+Task Frequency: 7
+====================================
+ */
