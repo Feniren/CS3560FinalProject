@@ -138,8 +138,7 @@ public class Task{
 
   public boolean SetStartTime(float startTime){
     if ((startTime >= 0) && (startTime <= 23.75)){
-      StartTime = RoundFloat(StartTime);
-
+      StartTime = RoundFloat(startTime);
       return true;
     }
 
