@@ -19,15 +19,11 @@ public class Main {
 
     testSchedule.createTask("mimis2", "Cancellation", 0.0f, 0.15f, 20240501); //antitask
 
-    testSchedule.createTask("Your mom", "Visit", 0.0f, 0.0f, 20240303); //Transient Test
+    //testSchedule.createTask("Your mom", "Visit", 0.0f, 0.0f, 20240303); //Transient Test
 
-    // testSchedule.DeleteTask("asdf");
-
-    testSchedule.DeleteTask("mimis1");
+    // testSchedule.DeleteTask("mimis1");
       
-    //testSchedule.viewTask("Your mom"); // found overlap and deleted
-
-    //testSchedule.createTask("Your mom", "Visit", 0.0f, 0.0f, 20240101); //Transient Test
+    testSchedule.createTask("Trans Test", "Visit", 0.5f, 4.10f, 20240101); //Transient Test // Shouldnt be overlap
 
     testSchedule.printList(); //before your mom deletion
 
@@ -35,9 +31,9 @@ public class Main {
     
     //testSchedule.printList(); // after
 
-    testSchedule.editTaskMenu();
+    // testSchedule.editTaskMenu();
 
-    testSchedule.printList();
+    // testSchedule.printList();
   }
 }
 

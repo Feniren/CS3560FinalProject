@@ -52,6 +52,58 @@ public class Schedule
         return null;
     }
 
+    /**
+     * For the case of a Weekly Frequency Task
+     * @return
+     */
+    public Boolean weeklyDates(RecurringTask RecTask, int checkDate) {
+        int date = RecTask.getStartDate();
+        while(date <= RecTask.getEndDate()) {
+            // date + 7 check if valid date, if not valid add 1 until not valid and update month or year
+            // if valid date check if that date corresponds with date of task being compared
+            if(!isValid(date+7)) {
+                int count = 0;
+                String temp;
+                int day;
+                int year;
+                int month;
+                
+                while(count != 7) {
+                    date++;
+                    temp = String.valueOf(date);
+                    year = Integer.parseInt(temp.substring(0,3));
+                    month = Integer.parseInt(temp.substring(4,5));
+                    day = Integer.parseInt(temp.substring(6,7)); 
+                    if(!isValid(date) && month != 12) {
+                        month++;
+                        day = 1;
+
+                        temp = String.format("%04d%02d%02d", year, month, day);
+                        date = Integer.parseInt(temp);
+                    }
+                    if(!isValid(date) && month >= 12) {
+                        day = 1;
+                        month = 1;
+                        year++;
+
+                        temp = String.format("%04d%02d%02d", year, month, day);
+                        date = Integer.parseInt(temp);
+                    }
+                    count++;
+                }
+                
+                if(date == checkDate ) {
+                    return true;
+                }
+            } else if ((date+7) == checkDate) {
+                return true;
+            } else {
+                date = date+7;
+            }
+        }
+        return false;
+    }
+
     // current idea is to have it take a task name and have it check the list for all other task times
     // may encounter issues
     // Should try to simplify this in the future
@@ -189,7 +241,7 @@ public class Schedule
      * @return True if overlap is found, false otherwise
      */
     private boolean checkOverlap(float taskStartTime, float taskDuration, float checkingStartTime, float checkingEndTime) {
-        float taskEndTime = taskStartTime + taskDuration + 0.5f;
+        float taskEndTime = taskStartTime + taskDuration + 0.25f;
         float startTime = taskStartTime - 0.25f;
     
         if ((startTime >= checkingStartTime && startTime < checkingEndTime) ||
@@ -359,6 +411,12 @@ public class Schedule
     }
 
     // function does not have proper checks yet
+    /**
+     * The main function that is reponsible for changing the contents of a task
+     * @param chosenName The name of the chosen task to be edited
+     * @param ogTask The original task to be edited
+     * @param input The scanner name used to read user inputs
+     */
     public void editTask(String chosenName, Task ogTask, Scanner input) {
         boolean mainLoop = true;
         categorizeTask(chosenName);
@@ -377,7 +435,7 @@ public class Schedule
             frequency = ((RecurringTask) ogTask).getFrequency();
         }
 
-        //plan to use createTask option to create a ne task and delete old task
+        //plan to use createTask option to create a new task and delete old task
 
         int choice;
         while (mainLoop) {
@@ -442,6 +500,9 @@ public class Schedule
         }
     }
 
+    /**
+     * Produces a main menu to the user to allow for editing a task
+     */
     public void editTaskMenu() {
         Scanner input = new Scanner(System.in);
         boolean mainLoop = true;
@@ -505,7 +566,7 @@ public class Schedule
     // cannot lower case the class types, must be captilized properly? completed?
     /**
      * Create new task object with the given task subclass to be chosen
-     * @param Name
+     * @param Name 
      * @param classType
      * @param startTime
      * @param duration
@@ -514,7 +575,7 @@ public class Schedule
         Task newTask = null;
         boolean nameFlag = false;
         for(Task task: taskList) { //check if name already exists within list
-            if(task.getName() == name) {
+            if(task.getName().equals(name)) {
                 nameFlag = true;
             }
         }
@@ -530,7 +591,7 @@ public class Schedule
                         if(checkTaskOverlap(name)) {
                             Task task = findTask(name);
                             taskList.remove(task);
-                            System.out.println("overlap detected, could not create task");
+                            System.out.println("overlap detected, could not create task (Transient)");
                         }
                     } else {
                         System.out.println("Error when creating Transient-Task");
@@ -542,18 +603,19 @@ public class Schedule
                         int endDate = (int) additionalArgs[0];
                         int startDate = (int) additionalArgs[1];
                         int frequency = (int) additionalArgs[2];
+
                         newTask = new RecurringTask(name, classType, startTime, duration, date, endDate, startDate, frequency);
                         if(checkTaskOverlap(name)) {
                             Task task = findTask(name);
                             taskList.remove(task);
-                            System.out.println("overlap detected, could not create task");
+                            System.out.println("overlap detected, could not create task (Recurrent)");
                         }
                         taskList.add(newTask);
 
                         // newTask = new AntiTask(name, classType, startTime, duration, date);
                     // taskList.add(newTask);
                     } else {
-                        System.out.println("Error when creating Recurring-Task");
+                        System.out.println("Error when creating Recurring-Task (Recurrent)");
                     }
                     break;
                 case "anti":
@@ -564,7 +626,7 @@ public class Schedule
                         if(checkTaskOverlap(name)) {
                             Task task = findTask(name);
                             taskList.remove(task);
-                            System.out.println("overlap detected, could not create task");
+                            System.out.println("overlap detected, could not create task (Anti)");
                         }
                     } else {
                         System.out.println("Error when creating Anti-Task");
