@@ -15,13 +15,14 @@ public class Main {
     ArrayList<Task> tasks = new ArrayList<Task>();
     Schedule testSchedule = new Schedule("day", 20240101, tasks);
 
-    testSchedule.createTask("recTask1", "Class", 1.25f, 3.5f, 20240501, 20240528, 7); // recurrent task
-    //testSchedule.createTask("recTask2", "Class", 1.25f, 3.5f, 20240502, 20240526, 7); // recurrent task
+    //testSchedule.createTask("recTask1", "Class", 1.25f, 3.5f, 20240501, 20240528, 7); // recurrent task
+    testSchedule.createTask("recTask2", "Class", 1.25f, 3.5f, 20240501, 20240526, 7); // recurrent task
     testSchedule.createTask("TransTask1", "Visit", 1.25f, 1.5f, 20240501); // transient task
     testSchedule.createTask("TransTask2", "Visit", 1.25f, 1.5f, 20240508); // transient task
+    testSchedule.createTask("TransTask3", "Visit", 1.25f, 1.5f, 20240509); // transient task
     //testSchedule.createTask("TransTask2", "Visit", 0.25f, 1.5f, 20240501); // transient task
     testSchedule.createTask("mimis2", "Cancellation", 1.25f, 3.5f, 20240501); //antitask
-    testSchedule.createTask("TransTask1", "Visit", 1.25f, 1.5f, 20240501); // transient task
+    testSchedule.createTask("TransTask4", "Visit", 1.25f, 1.5f, 20240501); // transient task
 
 
     // testSchedule.editTaskMenu();
