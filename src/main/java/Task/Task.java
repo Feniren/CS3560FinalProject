@@ -1,80 +1,66 @@
 package Task;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.DateTimeException;
-import java.time.LocalDate;
-// import java.time.format.DateTimeFormatter;
+import java.text.*;
+import java.time.format.DateTimeFormatter;
 
-public class Task
-{
+public class Task{
   String Name;
   String Type;
   float StartTime;
   float Duration;
   int Date;
+  String[] TaskTypes;
 
-  // constructor parameters
-  public Task(String name, String type, float startTime, float duration, int date){
-    this.Name = name;
-    this.Type = type;
-    this.StartTime = startTime;
-    this.Duration = duration;
-    this.Date = date;
-  }
-
-  // For testing purposes for now
-  public Task() {
+  public Task(){
     Name = "Your mom";
     Type = "Idk";
     StartTime = 0.0f;
     Duration = 0.0f;
     Date = 20240101;
+    TaskTypes = new String[1];
+
+    TaskTypes[0] = "Null";
   }
 
-  public float setDuration(float duration) {
-    Duration = duration;
-    return Duration;
+  public boolean DateValid(int date){
+    String DateFormatter;
+    DateFormat DateValidator = new SimpleDateFormat("yyyy-mm-dd");
+
+    DateFormatter = String.valueOf(date);
+    DateFormatter = DateFormatter.substring(0, 4) + "-" + DateFormatter.substring(4, 6) + "-" + DateFormatter.substring(6, DateFormatter.length());
+
+    DateValidator.setLenient(false);
+
+    try{
+      DateValidator.parse(DateFormatter);
+    }
+    catch (Exception e){
+      System.out.println("Invalid Date");
+
+      return false;
+    }
+
+    return true;
   }
 
-  public float setStartTime(float startTime) {
-    StartTime = startTime;
-    return StartTime;
-  }
-
-  public String setType(String type) {
-    Type = type;
-    return Type;
-  }
-
-  public String setName(String name) {
-    Name = name;
-    return Name;
-  }
-
-  public int setDate(int date) {
-    Date = date;
+  public int GetDate(){
     return Date;
   }
 
-  public int getDate() {
-    return Date;
-  }
-
-  public float getDuration() {
+  public float GetDuration(){
     return Duration;
   }
 
-  public float getStartTime() {
+  public String GetName(){
+    return Name;
+  }
+
+  public float GetStartTime(){
     return StartTime;
   }
 
-  public String getType() {
+  public String GetType(){
     return Type;
-  }
-  
-    public String getName(){
-    return Name;
   }
 
   public float RoundFloat(float number){
@@ -121,45 +107,8 @@ public class Task
   }
 
   public boolean SetDate(int date){
-    /*String[] DateComponents = new String[3];
-
-    DateComponents[0] = String.valueOf(date).substring(0, 4);
-    DateComponents[1] = String.valueOf(date).substring(4, 6);
-    DateComponents[2] = String.valueOf(date).substring(6, 8);
-
-    if ((Integer.parseInt(DateComponents[1]) < 1) || (Integer.parseInt(DateComponents[1]) > 12)){
-      return false;
-    }
-
-    if ((Integer.parseInt(DateComponents[2]) < 1)){
-      return false;
-    }
-
-    return true;*/
-
-    String DateFormatter;
-    DateFormat DateValidator = new SimpleDateFormat("yyyy-mm-dd");
-
-    DateFormatter = String.valueOf(date);
-    DateFormatter = DateFormatter.substring(0, 4) + "-" + DateFormatter.substring(4, 6) + "-" + DateFormatter.substring(6, DateFormatter.length());
-
-    DateValidator.setLenient(false);
-
-    try{
-      DateValidator.parse(DateFormatter);
-    }
-    catch (Exception e){
-      return false;
-    }
-
-    Date = date;
-
-    return true;
-  }
-
-  public boolean SetStartTime(float startTime){
-    if ((startTime >= 0) && (startTime <= 23.75)){
-      StartTime = startTime;
+    if (DateValid(date)){
+      Date = date;
 
       return true;
     }
@@ -176,9 +125,38 @@ public class Task
       return true;
     }
 
+    System.out.println("Invalid Duration");
+
     return false;
   }
 
-  void SetType(String Type){
+  public boolean SetName(String name){
+    Name = name;
+
+    return true;
+  }
+
+  public boolean SetStartTime(float startTime){
+    if ((startTime >= 0) && (startTime <= 23.75)){
+      StartTime = RoundFloat(StartTime);
+
+      return true;
+    }
+
+    System.out.println("Invalid Start Time");
+
+    return false;
+  }
+
+  public boolean SetType(String type){
+    for (int i = 0; i < TaskTypes.length; i++){
+      if (TaskTypes[i].equals(type)){
+        Type = type;
+
+        return true;
+      }
+    }
+
+    return false;
   }
 }
