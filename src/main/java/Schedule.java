@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.InputMismatchException;
 import java.util.List;
 
 import java.util.Scanner;
@@ -46,7 +47,7 @@ public class Schedule
      */
     public Task findTask(String Name) {
         for (Task task: taskList) {
-            if(task.GetName() == Name) {
+            if(task.GetName().equals(Name)) {
                 return task;
             }
         }
@@ -154,7 +155,7 @@ public class Schedule
         int aCount = 0; // number of anti task overlaps
         int tCount = 0; // number of transient task overlaps
 
-        System.out.println("checking task" + taskToCheck);
+        System.out.println("checking task " + taskToCheck);
         if (taskToCheck == null) { // checks if task exists, removal of this breaks function
             return false;
         }
@@ -163,10 +164,10 @@ public class Schedule
             case "transient":
                 TransientTask checkTTask = (TransientTask) taskToCheck;
                 for(Task task: taskList) {
-                    if (task.GetName().equals(name)) {
-                        System.out.println("Same task name, no overlap");
+                    if (task.GetName().equalsIgnoreCase(name)) {
+                        // System.out.println("Same task name, no overlap");
                         continue; // Same Task, no overlap
-                    }
+                    } //this feels weird but is needed
                     // Trans vs Recurring
                     if (categorizeTask(task.GetType()).equals("recurring")) {
                         RecurringTask recurringTask = (RecurringTask) task;
@@ -483,6 +484,7 @@ public class Schedule
                 System.out.println("Task End Date: " + recTask.GetEndDate());
                 System.out.println("Task Start Date: " + recTask.GetStartDate());
                 System.out.println("Task Frequency: " + recTask.GetFrequency());
+                break;
             case "anti":
                 System.out.println("Task Date: " + task.GetDate());
                 break;
@@ -534,10 +536,10 @@ public class Schedule
     }
 
     // function does not have proper checks yet
-    public void editTask(String chosenName, Task ogTask, Scanner input) {
+    public void editTask(Task ogTask, Scanner input) {
         boolean mainLoop = true;
-        categorizeTask(chosenName);
 
+        String originalName = ogTask.GetName();
         String taskName = ogTask.GetName();
         String classType = ogTask.GetType();
         float startTime = ogTask.GetStartTime();
@@ -555,6 +557,7 @@ public class Schedule
         //plan to use createTask option to create a ne task and delete old task
 
         int choice;
+        // input.nextLine();
         while (mainLoop) {
             System.out.println("Edit Options: ");
             System.out.println("1) Change Task Name");
@@ -567,6 +570,7 @@ public class Schedule
             System.out.println("8) Finalize Changes");
             System.out.println("9) Cancel Edit");
 
+            try {
             choice = input.nextInt();
             input.nextLine();
 
@@ -594,15 +598,33 @@ public class Schedule
                 case 6:
                     System.out.println("Enter new End Date: ");
                     endDate = input.nextInt();
+                    break;
                 case 7:
                     System.out.println("Enter new Frequency (1, 7, or 0): ");
                     frequency = input.nextInt();
                     break;
                 case 8:
-                    if (frequency == 0) {
-                        createTask(taskName, classType, startTime, duration, date);
+                    System.out.println("Changing Task Features...");
+                    // Check for duplicate task name before finalizing changes
+                    Task existingTask = findTask(taskName);
+                    if (existingTask != null && existingTask != ogTask) {
+                        System.out.println("A task with this name already exists. Reverting to original name...");
+                        taskName = originalName;
                     } else {
-                        createTask(taskName, classType, startTime, duration, date, endDate, date, frequency);
+                        taskList.remove(ogTask);
+                        if (frequency == 1 || frequency == 7) {
+                            createTask(taskName, classType, startTime, duration, date, endDate, date, frequency);
+                            if(findTask(taskName) == null) {
+                                System.out.println("Change failed, reverting...");
+                                createTask(originalName, ogTask.GetType(), ogTask.GetStartTime(), ogTask.GetDuration(), ogTask.GetDate(), ((RecurringTask) ogTask).GetEndDate(), ogTask.GetDate(), frequency = ((RecurringTask) ogTask).GetFrequency());
+                            }
+                        } else {
+                            createTask(taskName, classType, startTime, duration, date);
+                            if(findTask(taskName) == null) {
+                                System.out.println("Change failed, reverting...");
+                                createTask(originalName, ogTask.GetType(), ogTask.GetStartTime(), ogTask.GetDuration(), ogTask.GetDate());
+                            }
+                        }
                     }
                     mainLoop = false;
                     break;
@@ -613,6 +635,10 @@ public class Schedule
                 default:
                     System.out.println("Invalid Option");
                     break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid Input, Please try again");
+                input.nextLine();
             }
         }
     }
@@ -621,34 +647,42 @@ public class Schedule
         Scanner input = new Scanner(System.in);
         boolean mainLoop = true;
 
-        int choice;
+        // int choice;
         while (mainLoop) {
             System.out.println("Edit Task Menu");
             System.out.println("1) Choose Task");
             System.out.println("2) Cancel Edit");
 
-            choice = input.nextInt();
-            input.nextLine();
+            // choice = input.nextInt();
+            // input.nextLine();
 
-            switch (choice) {
-                case 1:
-                    System.out.println("Please Enter the Task to be Edited: ");
-                    String chosenName = input.nextLine();
-                    Task ogTask = findTask(chosenName);
-                    if (ogTask != null) {
-                        System.out.println("You have chosen to edit: " + chosenName);
-                        editTask(chosenName, ogTask, input); // Call the editTask function
-                    } else {
-                        System.out.println("Task not found.");
-                    }
-                    break;
-                case 2:
-                    System.out.println("Edit Option Cancelled");
-                    mainLoop = false; // exit loop
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-                    break;
+            try {
+                int choice = input.nextInt();
+                input.nextLine(); 
+
+                switch (choice) {
+                    case 1:
+                        System.out.println("Please Enter the Task to be Edited: ");
+                        String chosenName = input.nextLine();
+                        Task ogTask = findTask(chosenName);
+                        if (ogTask != null) {
+                            System.out.println("You have chosen to edit: " + chosenName);
+                            editTask(ogTask, input); // Call the editTask function
+                        } else {
+                            System.out.println("Task not found.");
+                        }
+                        break;
+                    case 2:
+                        System.out.println("Edit Option Cancelled");
+                        mainLoop = false; // exit loop
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                        break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                input.nextLine(); // Consume the invalid input
             }
         }
         input.close();
@@ -661,21 +695,21 @@ public class Schedule
      */
     public String categorizeTask(String type) {
         String taskType = "";
-        switch(type){
-            case "Visit": case "Shopping": case "Appointment":
+        switch(type.toLowerCase()){
+            case "visit": case "shopping": case "appointment":
                 taskType = "transient";
                 break;
-            case "Class": case "Study": case "Sleep": case "Exercise": case "Work": case "Meal":
+            case "class": case "study": case "sleep": case "exercise": case "work": case "meal":
                 taskType = "recurring";
                 break;
-            case "Cancellation":
+            case "cancellation":
                 taskType = "anti";
                 break;
             default:
                 System.out.println("Error Finding classType name");
         }
         return taskType;
-    }
+    }    
 
     /**
      * Create new task object with the given task subclass to be chosen
