@@ -38,6 +38,10 @@ public class Schedule
         return this.taskList;
     }
 
+    public List<Task> setTaskList(List<Task> newTaskList){
+        return this.taskList = newTaskList;
+    }
+
     // completed
     /**
      * searches the list for a task of a given name
@@ -140,28 +144,13 @@ public class Schedule
      * @param Name
      */
     public void ViewTask(String Name) {
-        Task task = findTask(Name);
-
-        System.out.println("====================================");
-        System.out.println(task.getName());
-        System.out.println(task.getType());
-        System.out.println(task.getStartTime());
-        System.out.println(task.getDuration());
-        System.out.println(task.getDate());
-        
-        switch(categorizeTask(task.getType())) {
-            case "transient":
-                break;
-            case "recurring":
-                RecurringTask recTask = (RecurringTask) task;
-                System.out.println(recTask.getEndDate());
-                System.out.println(recTask.getStartDate());
-                System.out.println(recTask.getFrequency());
-            case "anti":
-                break;
-            
+        Task task = findTask(Name);		
+		System.out.printf("%s %s %s", PSS.formatDate(task.getDate()), task.toString(), categorizeTask(task.getType()));
+		if (task instanceof RecurringTask){
+			RecurringTask recTask = (RecurringTask) task;
+			System.out.printf(" (%s to %s)", PSS.formatDate(recTask.getStartDate()), PSS.formatDate(recTask.getEndDate()));
         }
-    
+		System.out.println();
     }
 
     // a modified checkOverlap may be used for Anti-Tasks to check if more than 1 tasks are overlapping it
@@ -263,7 +252,6 @@ public class Schedule
                     int startDate = (int) additionalArgs[1];
                     int frequency = (int) additionalArgs[2];
                     newTask = new RecurringTask(name, classType, startTime, duration, date, endDate, startDate, frequency);
-                    System.out.println("Crfeated");
                     taskList.add(newTask);
 
                     // newTask = new AntiTask(name, classType, startTime, duration, date);

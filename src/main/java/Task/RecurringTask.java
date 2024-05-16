@@ -1,5 +1,7 @@
 package Task;
 
+import java.text.DecimalFormat;
+
 public class RecurringTask extends Task{
     int EndDate;
     int StartDate;
@@ -25,6 +27,10 @@ public class RecurringTask extends Task{
     public int getFrequency() {
         return Frequency;
     }
+
+	public String toString(){
+		return super.toString() + String.format(" (repeats every %d days)", getFrequency());
+	}
 
     // Testing if this works...
     // RecurringTask rTask = new RecurringTask("asdf", "recurring task thing", 0.0f, 0.0f, 20240101, 20240101, 20240202, 5);  

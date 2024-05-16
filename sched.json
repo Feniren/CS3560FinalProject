@@ -1,1 +1,1 @@
-[{"StartDate":20240101,"Type":"Meal","StartTime":0,"Frequency":5,"Duration":0,"EndDate":20240202,"Date":20240101,"Name":"asdf"},{"Type":"Visit","StartTime":0,"Duration":0,"Date":20240101,"Name":"Your mom"}]
+[{"StartDate":20240101,"Type":"Meal","StartTime":9,"Frequency":5,"Duration":2.5,"EndDate":20240202,"Date":20240101,"Name":"asdf"},{"Type":"Visit","StartTime":15.5,"Duration":1,"Date":20240101,"Name":"Your mom"}]
