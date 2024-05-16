@@ -17,26 +17,26 @@ public class Main {
 
     //testSchedule.createTask("recTask1", "Class", 1.25f, 3.5f, 20240501, 20240528, 7); // recurrent task
     testSchedule.createTask("recTask2", "Class", 1.25f, 3.5f, 20240501, 20240526, 7); // recurrent task
-    testSchedule.createTask("TransTask1", "Visit", 1.25f, 1.5f, 20240501); // transient task overlap with recTask2
-    testSchedule.createTask("TransTask2", "Visit", 1.25f, 1.5f, 20240508); // transient task overlap with recTask2
+    // testSchedule.createTask("TransTask1", "Visit", 1.25f, 1.5f, 20240501); // transient task overlap with recTask2
+    // testSchedule.createTask("TransTask2", "Visit", 1.25f, 1.5f, 20240508); // transient task overlap with recTask2
     testSchedule.createTask("TransTask3", "Visit", 1.25f, 1.5f, 20240509); // transient task prints no overlap
-    //testSchedule.createTask("TransTask2", "Visit", 0.25f, 1.5f, 20240501); // transient task
-    testSchedule.createTask("RecTask3", "Class", 1.25f, 3.5f, 20240825, 20240709,1); // This date is backwards but is not caught
+    // testSchedule.createTask("TransTask2", "Visit", 0.25f, 1.5f, 20240501); // transient task, overlap
+    testSchedule.createTask("RecTask3", "Class", 1.25f, 3.5f, 20240801, 20240726,7); // Change this to 7 and you get an infinite Invalid Date Print
+    // testSchedule.createTask("RecTask4", "Class", 1.25f, 3.5f, 20240801, 20240826,7); // Change this to 7 and you get an infinite Invalid Date Print
     testSchedule.createTask("mimis2", "Cancellation", 1.25f, 3.5f, 20240501); //antitask prints with overlap to recurrence
-    testSchedule.createTask("TransTask4", "Visit", 1.25f, 1.5f, 20240501); // transient task, prints on overlap to recur during to cancellation task
+    // testSchedule.createTask("TransTask4", "Visit", 1.25f, 1.5f, 20240501); // transient task, prints on overlap to recur during to cancellation task
     // testSchedule.createTask("RecTask5", "Class", 1.25f, 3.55f, 20240709, 20240825, 7); // inputted as a editTask setup
 
     testSchedule.printList();
 
-    testSchedule.editTaskMenu();
+    // testSchedule.editTaskMenu();
 
-    testSchedule.printList();
+    // testSchedule.printList();
 
     // Line 166 changed print line to stop printing same task name, no overlap. Also added to ignore case.
 
-    // rec to rec changes are weird, sometimes changes are made but it keeps defaulting to frequency 1,
+    // rec to rec changes are weird, sometimes changes are made but it keeps defaulting to frequency 1 (FIXED)
 
-    //Multiple attempts at changing the frequency with unaligned dates, something is causing it to default the frequency no matter what
     /*
      * ====================================
 Task Name: RecTask3
@@ -117,8 +117,5 @@ Task Date: 20240501
 ====================================
      */
 
-
-
-    // testSchedule.editTaskMenu();
   }
 }

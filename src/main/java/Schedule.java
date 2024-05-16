@@ -551,7 +551,9 @@ public class Schedule
         int frequency = 0;
         if (ogTask instanceof RecurringTask) {
             endDate = ((RecurringTask) ogTask).GetEndDate();
+            // System.out.println("rectask: " + endDate);
             frequency = ((RecurringTask) ogTask).GetFrequency();
+            // System.out.println("frequency: " + frequency);
         }
 
         //plan to use createTask option to create a ne task and delete old task
@@ -613,10 +615,10 @@ public class Schedule
                     } else {
                         taskList.remove(ogTask);
                         if (frequency == 1 || frequency == 7) {
-                            createTask(taskName, classType, startTime, duration, date, endDate, date, frequency);
+                            createTask(taskName, classType, startTime, duration, date, endDate,frequency);
                             if(findTask(taskName) == null) {
                                 System.out.println("Change failed, reverting...");
-                                createTask(originalName, ogTask.GetType(), ogTask.GetStartTime(), ogTask.GetDuration(), ogTask.GetDate(), ((RecurringTask) ogTask).GetEndDate(), ogTask.GetDate(), frequency = ((RecurringTask) ogTask).GetFrequency());
+                                createTask(originalName, ogTask.GetType(), ogTask.GetStartTime(), ogTask.GetDuration(), ogTask.GetDate(), ((RecurringTask) ogTask).GetEndDate(), ((RecurringTask) ogTask).GetFrequency());
                             }
                         } else {
                             createTask(taskName, classType, startTime, duration, date);
@@ -748,19 +750,19 @@ public class Schedule
                 // Create RecurringTask
                     if (additionalArgs.length >= 2) {
                         int endDate = (int) additionalArgs[0];
-                        // int startDate = (int) additionalArgs[1];
                         int frequency = (int) additionalArgs[1];
-                        newTask = new RecurringTask(duration, endDate, frequency, name, date, startTime, classType);
+                        System.out.println("endDate: " + endDate);
+                        if (endDate < date) {
+                            System.out.println("invalid date time");
+                            break;
+                        }
+                        newTask = new RecurringTask(duration, endDate, frequency, name, date, startTime, classType);  
                         taskList.add(newTask);
                         if(checkTaskOverlap(name)) {
                             Task task = findTask(name);
                             taskList.remove(task);
                             System.out.println("overlap detected, could not create task");
                         }
-                
-
-                        // newTask = new AntiTask(name, classType, startTime, duration, date);
-                    // taskList.add(newTask);
                     } else {
                         System.out.println("Error when creating Recurring-Task");
                     }
