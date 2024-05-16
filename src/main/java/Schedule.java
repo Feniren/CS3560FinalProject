@@ -525,7 +525,7 @@ public class Schedule
                     // Create TransientTask
                     if (additionalArgs.length >= 0) {
 
-                        newTask = new TransientTask(name, classType, startTime, duration, date);
+                        newTask = new TransientTask(date, duration, name, startTime, classType);
                         taskList.add(newTask);
                         if(checkTaskOverlap(name)) {
                             Task task = findTask(name);
@@ -542,7 +542,7 @@ public class Schedule
                         int endDate = (int) additionalArgs[0];
                         int startDate = (int) additionalArgs[1];
                         int frequency = (int) additionalArgs[2];
-                        newTask = new RecurringTask(name, classType, startTime, duration, date, endDate, startDate, frequency);
+                        newTask = new RecurringTask(duration, endDate, frequency, name, startDate, startTime, classType);
                         if(checkTaskOverlap(name)) {
                             Task task = findTask(name);
                             taskList.remove(task);
@@ -559,7 +559,7 @@ public class Schedule
                 case "anti":
                     // Create AntiTask
                     if (additionalArgs.length >= 0) {
-                        newTask = new AntiTask(name, classType, startTime, duration, date);
+                        newTask = new AntiTask(date, duration, name, startTime, classType);
                         taskList.add(newTask);
                         if(checkTaskOverlap(name)) {
                             Task task = findTask(name);

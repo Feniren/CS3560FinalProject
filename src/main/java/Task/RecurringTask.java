@@ -30,6 +30,14 @@ public class RecurringTask extends Task{
         TaskTypes[4] = "Study";
         TaskTypes[5] = "Work";
 
+        if (!SetStartDate(startDate)){
+            SetStartDate(20240101);
+        }
+
+        if (!SetStartTime(startTime)){
+            SetStartTime(0.0f);
+        }
+
         if (!SetDuration(duration)){
             SetDuration(0.25f);
         }
@@ -44,14 +52,6 @@ public class RecurringTask extends Task{
 
         if (!SetName(name)){
             SetName(name);
-        }
-
-        if (!SetStartDate(startDate)){
-            SetStartDate(20240101);
-        }
-
-        if (!SetStartTime(startTime)){
-            SetStartTime(0.0f);
         }
 
         if (!SetType(type)){
