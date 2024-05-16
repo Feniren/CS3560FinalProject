@@ -1,7 +1,5 @@
 package Task;
 
-import java.text.DecimalFormat;
-
 public class RecurringTask extends Task{
     int EndDate;
     int StartDate;
@@ -29,7 +27,7 @@ public class RecurringTask extends Task{
     }
 
 	public String toString(){
-		return super.toString() + String.format(" (repeats every %d days)", getFrequency());
+		return super.toString() + String.format(" (repeats every %d day%s)", getFrequency(), (getFrequency()>1) ? "s" : "");
 	}
 
     // Testing if this works...

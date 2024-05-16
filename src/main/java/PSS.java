@@ -11,6 +11,7 @@ import Task.AntiTask;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 public class PSS {
     public static Schedule readFromFile(String pathString){
@@ -26,7 +27,7 @@ public class PSS {
 												j.getString("Type"),
 												j.getNumber("StartTime").floatValue(),
 												j.getNumber("Duration").floatValue(),
-												j.getNumber("Date").intValue(),
+												j.getNumber("StartDate").intValue(),
 												j.getNumber("StartDate").intValue(),
 												j.getNumber("EndDate").intValue(),
 												j.getNumber("Frequency").intValue());
@@ -40,12 +41,13 @@ public class PSS {
 												j.getNumber("Date").intValue());
 						break;
 					default:
-						System.out.println("Error, malformed task in file!");
+						System.out.printf("Error, bad task type %s!\n", Schedule.categorizeTask(j.getString("Type")));
 						return null;
 				}
 			}
         }
         catch(Exception e){
+			System.out.println(e);
 			System.out.println("Error, malformed task in file! Aborting.");
 			return null;
         }
@@ -82,7 +84,8 @@ public class PSS {
 	}
 
 	public static String viewSchedule(Schedule taskSchedule, int days, int startDate){
-		String s = String.format("Schedule from %s to %s (%d days):\n", formatDate(startDate), formatDate(startDate+days-1), days);
+		LocalDate sd = datetoLocalDate(startDate);
+		String s = String.format("Schedule from %s to %s (%d days):\n", sd.toString(), sd.plusDays(days-1).toString(), days);
 		sortSchedule(taskSchedule);
 		ArrayList<Task> antiTasks = new ArrayList<Task>();
 		for(Task t : taskSchedule.getTaskList()){
@@ -90,33 +93,32 @@ public class PSS {
 				antiTasks.add(t);
 			}
 		}
-		for (int currentdate = startDate; currentdate < startDate + days; currentdate++){
-			s += formatDate(currentdate) + ":";
+		LocalDate date = datetoLocalDate(startDate);
+		for (int i = 0; i < days; i++){
 			boolean hasTasks = false;
 			for(Task t : taskSchedule.getTaskList()){
-				if (!sameDay(currentdate, t)) continue;
+				if (!sameDay(date, t)) continue;
 				if (t instanceof RecurringTask){
 					RecurringTask r = (RecurringTask)t;
 					boolean cancelled = false;
 					for(Task a: antiTasks){
-						if (sameDay(a.getDate(), r) && a.getStartTime() == t.getStartTime()
-													&& a.getDuration() == t.getDuration()){
+						if (sameDay(date, a) && a.getStartTime() == t.getStartTime() && a.getDuration() == t.getDuration()){
 							cancelled = true;
 							break;
 						}
 					}
 					if (!cancelled){
-						s += ((hasTasks) ? "" : "\n") + r.toString() + "\n";
+						s += ((hasTasks) ? "" : (date.toString() + ":\n")) + r.toString() + "\n";
 						hasTasks = true;
 					}
 				} else if (t instanceof AntiTask){
 					assert true; // we don't output those
 				} else {
-					s += ((hasTasks) ? "" : "\n") + t.toString() + "\n";
+					s += ((hasTasks) ? "" : (date.toString() + ":\n")) + t.toString() + "\n";
 					hasTasks = true;
 				}
 			}
-			if (!hasTasks) s += " No tasks!\n";
+			date = date.plusDays(1);
 		}
 
 		return s; 
@@ -126,18 +128,25 @@ public class PSS {
 		return String.format("%d-%d-%d",  ((date-date%10000)/10000), (date - (date-date%10000))/100, (date%100));
 	}
 
-	public static boolean sameDay(int date, RecurringTask r){
-		if (date < r.getStartDate() || date >= r.getEndDate()) return false;
+	public static boolean sameDay(LocalDate date, RecurringTask r){
+		LocalDate sd = datetoLocalDate(r.getStartDate());
+		LocalDate ed = datetoLocalDate(r.getEndDate());
+		
+		if (date.compareTo(sd) < 0 || date.compareTo(ed) >= 0) return false;
 		
 		int f = r.getFrequency();
-		return (date%f == r.getStartDate()%f);
+		return date.toEpochDay()%f == sd.toEpochDay()%f;
 	}
 	
-	public static boolean sameDay(int date, Task t){
+	public static boolean sameDay(LocalDate date, Task t){
 		if (t instanceof RecurringTask){
 			return sameDay(date, (RecurringTask) t);
 		}
-		return (date == t.getDate());
+		return date.compareTo(datetoLocalDate(t.getDate())) == 0;
+	}
+
+	public static LocalDate datetoLocalDate(int d){
+		return LocalDate.of((d-d%10000)/10000, (d - (d-d%10000))/100, d%100);
 	}
 
 	public static void sortSchedule(Schedule taskSchedule){
