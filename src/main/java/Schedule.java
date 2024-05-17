@@ -45,6 +45,18 @@ public class Schedule
      * Gets the Start Date of the Schedule
      * @return startDate
      */
+
+    // Testing purposes
+    public Schedule(){
+        this.timeFrame = "day"; // day, week, month
+        this.startDate = 20240101;
+        this.taskList = new ArrayList<Task>();
+    }
+
+	public String getTimeFrame(){
+        return this.timeFrame;
+    }
+
     public int getStartDate(){
         return this.startDate;
     }
@@ -466,32 +478,14 @@ public class Schedule
      * prints out task info
      * @param Name The name of task to be viewed and printed
      */
-    public void viewTask(String Name) {
-        Task task = findTask(Name);
-        System.out.println("viewTask" + task);
-
-        System.out.println("====================================");
-        System.out.println("Task Name: " + task.GetName());
-        System.out.println("Task Type: " + task.GetType());
-        System.out.println("Task Start Time: " + task.GetStartTime());
-        System.out.println("Task Duration: " + task.GetDuration());
-
-        switch(categorizeTask(task.GetType())) {
-            case "transient":
-                System.out.println("Task Date: " + task.GetDate());
-                break;
-            case "recurring":
-                RecurringTask recTask = (RecurringTask) task;
-                System.out.println("Task End Date: " + recTask.GetEndDate());
-                System.out.println("Task Start Date: " + recTask.GetStartDate());
-                System.out.println("Task Frequency: " + recTask.GetFrequency());
-                break;
-            case "anti":
-                System.out.println("Task Date: " + task.GetDate());
-                break;
-
+    public void ViewTask(String Name) {
+        Task task = findTask(Name);		
+		System.out.printf("%s %s %s", PSS.formatDate(task.getDate()), task.toString(), categorizeTask(task.getType()));
+		if (task instanceof RecurringTask){
+			RecurringTask recTask = (RecurringTask) task;
+			System.out.printf(" (%s to %s)", PSS.formatDate(recTask.getStartDate()), PSS.formatDate(recTask.getEndDate()));
         }
-        System.out.println("====================================");
+		System.out.println();
     }
 
     /**

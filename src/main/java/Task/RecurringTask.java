@@ -108,3 +108,10 @@ public class RecurringTask extends Task{
         return false;
     }
 }
+	public String toString(){
+		return super.toString() + String.format(" (repeats every %d day%s)", getFrequency(), (getFrequency()>1) ? "s" : "");
+	}
+
+    // Testing if this works...
+    // RecurringTask rTask = new RecurringTask("asdf", "recurring task thing", 0.0f, 0.0f, 20240101, 20240101, 20240202, 5);  
+}

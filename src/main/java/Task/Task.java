@@ -1,9 +1,11 @@
 package Task;
 
-import java.text.*;
-import java.time.format.DateTimeFormatter;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 
-public class Task{
+public class Task
+{
   String Name;
   String Type;
   float StartTime;
@@ -61,6 +63,21 @@ public class Task{
 
   public String GetType(){
     return Type;
+  }
+  
+  public String getName(){
+    return Name;
+  }
+
+  public String toString(){
+	DecimalFormat f = new DecimalFormat("#.##");
+	DecimalFormat i = new DecimalFormat("00");
+
+	String s = String.format("%s:%s %s (for %s hour%s): %s (%s)",
+								i.format((int)getStartTime()%12), i.format((getStartTime() - (int)getStartTime())*60),
+								(getStartTime() >= 12.0f) ? "PM" : "AM", f.format(getDuration()), ((getDuration()>1) ? "s" : ""), getName(), getType());
+	
+	return s;
   }
 
   public float RoundFloat(float number){
