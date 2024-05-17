@@ -12,7 +12,7 @@ import Task.TransientTask;
 
 public class Schedule
 {
-    String timeFrame; // may change later to an int value, month length depends on start time which is annoying
+    String timeFrame; 
     int startDate; // beginning point of schedule
     List<Task> taskList; // list of all tasks may be sorted who knows,
 
@@ -21,13 +21,6 @@ public class Schedule
         this.timeFrame = timeFrame;
         this.startDate = startDate;
         this.taskList = taskList;
-    }
-
-    // Testing purposes
-    public Schedule(){
-        timeFrame = "day"; // day, week, month
-        startDate = 20240101;
-        taskList = new ArrayList<Task>();
     }
 
     /**
@@ -40,18 +33,35 @@ public class Schedule
         }
     }
 
+    /**
+     * Gets the Time Frame for the Schedule
+     * @return timeFrame
+     */
     public String getTimeFrame(){
         return this.timeFrame;
     }
 
+    /**
+     * Gets the Start Date of the Schedule
+     * @return startDate
+     */
     public int getStartDate(){
         return this.startDate;
     }
 
+    /**
+     * Gets the list of all Tasks created in this Schedule
+     * @return taskList
+     */
     public List<Task> getTaskList(){
         return this.taskList;
     }
 
+    /**
+     * Set the new list for taskList
+     * @param newTaskList New list of tasks
+     * @return taskList
+     */
     public List<Task> setTaskList(List<Task> newTaskList){
         return this.taskList = newTaskList;
     }
@@ -87,7 +97,6 @@ public class Schedule
 
         if(RecTask.GetFrequency() == 7) {
             while(date <= RecTask.GetEndDate()) {
-                //System.out.println("getting dates");
                 // date + 7 check if valid date, if not valid add 1 until not valid and update month or year
                 // if valid date check if that date corresponds with date of task being compared
                 if(!RecTask.DateValid(date+7)) {
@@ -169,7 +178,7 @@ public class Schedule
         int tCount = 0; // number of transient task overlaps
 
         System.out.println("checking task " + taskToCheck);
-        if (taskToCheck == null) { // checks if task exists, removal of this breaks function
+        if (taskToCheck == null) { // checks if task exists
             return false;
         }
         boolean flag = false; // false means no overlap, true means overlap
@@ -178,10 +187,9 @@ public class Schedule
                 TransientTask checkTTask = (TransientTask) taskToCheck;
                 for(Task task: taskList) {
                     if (task.GetName().equalsIgnoreCase(name)) {
-                        // System.out.println("Same task name, no overlap");
                         continue; // Same Task, no overlap
-                    } //this feels weird but is needed
-                    // Trans vs Recurring, wont be overlap if there are enough antitasks
+                    } 
+                    // Transient vs Recurring, wont be overlap if there are antitasks involved
                     if (categorizeTask(task.GetType()).equals("recurring")) {
                         RecurringTask recurringTask = (RecurringTask) task;
                         if (checkRecurringOverlap(checkTTask, recurringTask)) {
@@ -189,14 +197,14 @@ public class Schedule
                             rCount++;
                             continue;
                         }
-                        // Trans vs Anti
+                        // Transient vs AntiTask
                     } else if (categorizeTask(task.GetType()).equals("anti")) {
                         AntiTask antiTask = (AntiTask) task;
                         if (checkAntiOverlap(antiTask, checkTTask)) {
                             aCount++;
                             continue;
                         }
-                        //Trans vs Trans
+                        //Transient vs Transient
                     } else if (task.GetDate() == checkTTask.GetDate()) {
                         System.out.println("Two transient, same date");
                         TransientTask transTask = (TransientTask) task;
@@ -221,14 +229,14 @@ public class Schedule
                     if(task.GetName().equals(name)) {
                         continue; // same task, no overlap
                     }
-                    // Trans vs Recurring
+                    // Transient vs Recurring
                     if(categorizeTask(task.GetType()).equals("transient")) {
                         TransientTask transientTask = (TransientTask) task;
                         if(checkRecurringOverlap(transientTask, checkRTask)) {
                             transDates.add(transientTask.GetDate());
                             continue;
                         }
-                        // Anti vs Recurring
+                        // AntiTask vs Recurring
                     } else if(categorizeTask(task.GetType()).equals("anti")) {
                         AntiTask antiTask = (AntiTask) task;
                         if (checkAntiRecurringOverlap(antiTask, checkRTask)) {
@@ -282,22 +290,22 @@ public class Schedule
                     if(task.GetName().equals(name)) {
                         continue;
                     }
-                    // Trans vs anti
+                    // Transient vs antiTask
                     if(categorizeTask(task.GetType()).equals("transient")) {
                         TransientTask transientTask = (TransientTask) task;
                         if(checkAntiOverlap(checkATask, transientTask)) {
                             tCount++;
                             continue;
                         }
-                        // Anti vs Recurring
+                        // AntiTask vs Recurring
                     } else if(categorizeTask(task.GetType()).equals("recurring")) {
                         RecurringTask recurringTask = (RecurringTask) task;
                         if(checkAntiRecurringOverlap(checkATask, recurringTask)) {
-                            //we want overlap with recurring
+                            //we want overlap with recurring and AntiTask
                             rCount++;
                             continue;
                         } 
-                        // anti vs anti
+                        // antiTask vs antiTask
                     } else if(task.GetDate() == checkATask.GetDate()) {
                         System.out.println("Two anti, same date");
                         AntiTask antiTask = (AntiTask) task;
@@ -305,12 +313,12 @@ public class Schedule
                             aCount++;
                         }
                         continue;
-                    } else { // anti tasks on different date or no overlap on same date
+                    } else { // anti tasks on different dates or no overlap on same date
                         continue;
                     }
                 }
                 // this may be bugged need to test
-                if(rCount == aCount+1 && tCount == 0) { //must have 1 recurrent task underneath case for 
+                if(rCount == aCount+1 && tCount == 0) { //must have 1 recurrent task underneath case
                     flag = false;
                 } else { // 1 transient exists or too many anti tasks etc.
                     flag = true;
@@ -324,7 +332,7 @@ public class Schedule
     }
 
     /**
-     * The general checkOverlap Function for checking overlap each Task Type
+     * The general checkOverlap Function for checking overlap for each Task Type
      * @param taskStartTime Beginning time of a task
      * @param taskDuration Length of task
      * @param checkingStartTime Beginning time of comparison Task
@@ -343,7 +351,6 @@ public class Schedule
         return false;
     }
 
-    // Simplified functions, should hopefully work
     /**
      * Prepares variables to check overlap between Anti Tasks
      * @param checkATask The new task that is being checked
@@ -351,8 +358,6 @@ public class Schedule
      * @return Call checkOverlap function for variables
      */
     private boolean checkAntiToAntiOverlap(AntiTask checkATask, AntiTask antiTask) {
-        // float antiStartTime = antiTask.getStartTime();
-        // float checkingStartTime = checkATask.getStartTime();
         if(antiTask.GetDate() >= checkATask.GetDate() &&
                 antiTask.GetDate() <= checkATask.GetDate()) {
             float checkingEndTime = checkATask.GetStartTime() + checkATask.GetDuration() + 0.25f;
@@ -360,11 +365,12 @@ public class Schedule
         }
         return false;
     }
+
     /**
      * Prepares variables to check overlap between Transient Tasks
      * @param checkTTask The new task that is being checked
      * @param transientTask Task from list categorized as Transient Task
-     * @return Call checkOverlap function for variables
+     * @return Call checkOverlap function for variables, false otherwise
      */
     private boolean checkTranstoTransOverlap(TransientTask checkTTask, TransientTask transientTask) {
         if(transientTask.GetDate() >= checkTTask.GetDate() &&
@@ -379,7 +385,7 @@ public class Schedule
      * Prepares variables to check overlap between Recurrent Tasks
      * @param checkRTask The new task that is being checked
      * @param recurringTask Task from list categorized as Recurrent Task
-     * @return Call checkOverlap function for variables
+     * @return Call checkOverlap function for variables, false otherwise
      */
     private boolean checkRectoRecOverlap(RecurringTask checkRTask, RecurringTask recurringTask) {
         // Calculate the end time of checking task
@@ -415,7 +421,6 @@ public class Schedule
      * @return Call checkOverlap function for variables, false otherwise
      */
     private boolean checkRecurringOverlap(TransientTask transientTask, RecurringTask recurringTask) {
-        //System.out.println("test");
         ArrayList<Integer> datesList = weeklyDates(recurringTask);
         System.out.println(datesList);
         if(datesList.contains(transientTask.GetDate())) {
@@ -489,8 +494,6 @@ public class Schedule
         System.out.println("====================================");
     }
 
-    // a modified checkOverlap may be used for Anti-Tasks to check if more than 1 tasks are overlapping it
-    // if anti task, cannot delete it, if recurring task has anti task cannot delete, can easily delete transient
     /**
      * Deletes Task unless it conflicts with a rule
      * @param Name Name of chosen task to delete
@@ -531,7 +534,11 @@ public class Schedule
         }
     }
 
-    // function does not have proper checks yet
+    /**
+     * Edits an already existing task and change its attributes, produces a menu for user to interact with to make their choices
+     * @param ogTask The original task to be changed
+     * @param input Scanner to be used to read user input
+     */
     public void editTask(Task ogTask, Scanner input) {
         boolean mainLoop = true;
 
@@ -547,15 +554,10 @@ public class Schedule
         int frequency = 0;
         if (ogTask instanceof RecurringTask) {
             endDate = ((RecurringTask) ogTask).GetEndDate();
-            // System.out.println("rectask: " + endDate);
             frequency = ((RecurringTask) ogTask).GetFrequency();
-            // System.out.println("frequency: " + frequency);
         }
 
-        //plan to use createTask option to create a ne task and delete old task
-
         int choice;
-        // input.nextLine();
         while (mainLoop) {
             System.out.println("Edit Options: ");
             System.out.println("1) Change Task Name");
@@ -641,6 +643,9 @@ public class Schedule
         }
     }
 
+    /**
+     * Creates a menu for the user to choose to modify or not modify a task
+     */
     public void editTaskMenu() {
         Scanner input = new Scanner(System.in);
         boolean mainLoop = true;
@@ -650,9 +655,6 @@ public class Schedule
             System.out.println("Edit Task Menu");
             System.out.println("1) Choose Task");
             System.out.println("2) Cancel Edit");
-
-            // choice = input.nextInt();
-            // input.nextLine();
 
             try {
                 int choice = input.nextInt();
@@ -710,11 +712,11 @@ public class Schedule
     }    
 
     /**
-     * Create new task object with the given task subclass to be chosen
-     * @param Name
-     * @param classType
-     * @param startTime
-     * @param duration
+     * Creates a new task object and adds to the list of tasks
+     * @param Name Name of new Task object
+     * @param classType The type that the task will be created under
+     * @param startTime The start time of the task
+     * @param duration The duration of the task
      */
     public Task createTask(String name, String classType, float startTime, float duration, int date, Object... additionalArgs) {
         Task newTask = null;
@@ -726,7 +728,6 @@ public class Schedule
         }
         
         if(!nameFlag) {
-            // change class type to possibly another term to change, maybe make function that reads all allowed names 
             switch(categorizeTask(classType)) {
                 case "transient":
                     // Create TransientTask
