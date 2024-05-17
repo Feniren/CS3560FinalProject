@@ -29,7 +29,7 @@ public class Schedule
     public void printList() {
         System.out.println("Printing Task List: ");
         for (Task task : taskList) {
-            viewTask(task.GetName());
+            ViewTask(task.GetName());
         }
     }
 
@@ -51,10 +51,6 @@ public class Schedule
         this.timeFrame = "day"; // day, week, month
         this.startDate = 20240101;
         this.taskList = new ArrayList<Task>();
-    }
-
-	public String getTimeFrame(){
-        return this.timeFrame;
     }
 
     public int getStartDate(){
@@ -480,10 +476,10 @@ public class Schedule
      */
     public void ViewTask(String Name) {
         Task task = findTask(Name);		
-		System.out.printf("%s %s %s", PSS.formatDate(task.getDate()), task.toString(), categorizeTask(task.getType()));
+		System.out.printf("%s %s %s", PSS.formatDate(task.GetDate()), task.toString(), categorizeTask(task.GetType()));
 		if (task instanceof RecurringTask){
 			RecurringTask recTask = (RecurringTask) task;
-			System.out.printf(" (%s to %s)", PSS.formatDate(recTask.getStartDate()), PSS.formatDate(recTask.getEndDate()));
+			System.out.printf(" (%s to %s)", PSS.formatDate(recTask.GetStartDate()), PSS.formatDate(recTask.GetEndDate()));
         }
 		System.out.println();
     }
@@ -687,7 +683,7 @@ public class Schedule
      * @param type The Task type associated with a task class
      * @return taskType, Returns task type as Transient, Recurrent, or Anti
      */
-    public String categorizeTask(String type) {
+    public static String categorizeTask(String type) {
         String taskType = "";
         switch(type.toLowerCase()){
             case "visit": case "shopping": case "appointment":

@@ -107,9 +107,9 @@ public class RecurringTask extends Task{
 
         return false;
     }
-}
+
 	public String toString(){
-		return super.toString() + String.format(" (repeats every %d day%s)", getFrequency(), (getFrequency()>1) ? "s" : "");
+		return super.toString() + String.format(" (repeats every %d day%s)", GetFrequency(), (GetFrequency()>1) ? "s" : "");
 	}
 
     // Testing if this works...

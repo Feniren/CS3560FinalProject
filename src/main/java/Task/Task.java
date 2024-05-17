@@ -74,8 +74,8 @@ public class Task
 	DecimalFormat i = new DecimalFormat("00");
 
 	String s = String.format("%s:%s %s (for %s hour%s): %s (%s)",
-								i.format((int)getStartTime()%12), i.format((getStartTime() - (int)getStartTime())*60),
-								(getStartTime() >= 12.0f) ? "PM" : "AM", f.format(getDuration()), ((getDuration()>1) ? "s" : ""), getName(), getType());
+								i.format((int)GetStartTime()%12), i.format((GetStartTime() - (int)GetStartTime())*60),
+								(GetStartTime() >= 12.0f) ? "PM" : "AM", f.format(GetDuration()), ((GetDuration()>1) ? "s" : ""), getName(), GetType());
 	
 	return s;
   }

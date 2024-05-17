@@ -89,14 +89,14 @@ public class PSS {
 		for (Task t : taskSchedule.getTaskList()){
 			JSONObject tJSON = new JSONObject();
 			tJSON.put("Name", t.getName());
-			tJSON.put("Type", t.getType());
-			tJSON.put("StartTime", t.getStartTime());
-			tJSON.put("Duration", t.getDuration());
-			tJSON.put("Date", t.getDate());
+			tJSON.put("Type", t.GetType());
+			tJSON.put("StartTime", t.GetStartTime());
+			tJSON.put("Duration", t.GetDuration());
+			tJSON.put("Date", t.GetDate());
 			if (t instanceof RecurringTask){
-				tJSON.put("StartDate", ((RecurringTask)t).getStartDate());
-				tJSON.put("EndDate", ((RecurringTask)t).getEndDate());
-				tJSON.put("Frequency", ((RecurringTask)t).getFrequency());
+				tJSON.put("StartDate", ((RecurringTask)t).GetStartDate());
+				tJSON.put("EndDate", ((RecurringTask)t).GetEndDate());
+				tJSON.put("Frequency", ((RecurringTask)t).GetFrequency());
 			}
 			tasksJSON.put(tJSON);
 		}
@@ -120,7 +120,7 @@ public class PSS {
 		sortSchedule(taskSchedule);
 		ArrayList<Task> antiTasks = new ArrayList<Task>();
 		for(Task t : taskSchedule.getTaskList()){
-			if(Schedule.categorizeTask(t.getType()).equals("anti")){
+			if(Schedule.categorizeTask(t.GetType()).equals("anti")){
 				antiTasks.add(t);
 			}
 		}
@@ -133,7 +133,7 @@ public class PSS {
 					RecurringTask r = (RecurringTask)t;
 					boolean cancelled = false;
 					for(Task a: antiTasks){
-						if (sameDay(date, a) && a.getStartTime() == t.getStartTime() && a.getDuration() == t.getDuration()){
+						if (sameDay(date, a) && a.GetStartTime() == t.GetStartTime() && a.GetDuration() == t.GetDuration()){
 							cancelled = true;
 							break;
 						}
@@ -173,12 +173,12 @@ public class PSS {
 	 * @return
 	 */
 	public static boolean sameDay(LocalDate date, RecurringTask r){
-		LocalDate sd = datetoLocalDate(r.getStartDate());
-		LocalDate ed = datetoLocalDate(r.getEndDate());
+		LocalDate sd = datetoLocalDate(r.GetStartDate());
+		LocalDate ed = datetoLocalDate(r.GetEndDate());
 		
 		if (date.compareTo(sd) < 0 || date.compareTo(ed) >= 0) return false;
 		
-		int f = r.getFrequency();
+		int f = r.GetFrequency();
 		return date.toEpochDay()%f == sd.toEpochDay()%f;
 	}
 	/**
@@ -191,7 +191,7 @@ public class PSS {
 		if (t instanceof RecurringTask){
 			return sameDay(date, (RecurringTask) t);
 		}
-		return date.compareTo(datetoLocalDate(t.getDate())) == 0;
+		return date.compareTo(datetoLocalDate(t.GetDate())) == 0;
 	}
 	/**
 	 * Creates a local date based on the parameters
