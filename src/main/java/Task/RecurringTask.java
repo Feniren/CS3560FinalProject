@@ -78,6 +78,8 @@ public class RecurringTask extends Task{
             return true;
         }
 
+        System.out.println("Invalid Frequency");
+
         return false;
     }
 
@@ -87,6 +89,8 @@ public class RecurringTask extends Task{
 
             return true;
         }
+
+        System.out.println("Invalid Start Date");
 
         return false;
     }
@@ -104,6 +108,8 @@ public class RecurringTask extends Task{
                 return false;
             }
         }
+
+        System.out.println("Invalid End Date");
 
         return false;
     }
