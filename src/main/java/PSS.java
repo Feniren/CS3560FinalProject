@@ -14,6 +14,13 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 
 public class PSS {
+	/**
+	 * takes a path string to a json file, creates a taskSchedule, takes the content from
+	 * the json file and iterates through the tasks adding them to the
+	 * Schedule object based on their type
+	 * @param pathString
+	 * @return taskSchedule
+	 */
     public static Schedule readFromFile(String pathString){
         Schedule taskSchedule = new Schedule();
         try{
@@ -53,6 +60,14 @@ public class PSS {
         }
 		return taskSchedule;
     }
+
+	/**
+	 * takes in the path to the json file that is to be created, and the Schedule object that 
+	 * is going to written into json format. It then writes it to a file using a method that takes
+	 * the Schedule's tasks and changes them into json format
+	 * @param pathString
+	 * @param taskSchedule
+	 */
     public static void writeToFile(String pathString, Schedule taskSchedule){
         try{
 			Files.write(Path.of(pathString), generateTasksJSON(taskSchedule).getBytes());
@@ -62,6 +77,12 @@ public class PSS {
         }
     }
 
+	/**
+	 * Takes in a Schedule and goes through each task and writes them in json file
+	 * format. Returns a string format for writeToFile to use
+	 * @param taskSchedule
+	 * @return taskJson.toString()
+	 */
 	public static String generateTasksJSON(Schedule taskSchedule){
 		JSONArray tasksJSON = new JSONArray();
 
@@ -83,6 +104,16 @@ public class PSS {
 		return tasksJSON.toString();
 	}
 
+	/**
+	 * Takes in a Schedule object, the number of days the user wants to see
+	 * (daily, weekly, monthly), and the start date of the part schedule wanted
+	 * to view. It then ensures that any recurring tasks do not have any anti-tasks,
+	 * if it does it will not print that instance of the recurring task.
+	 * @param taskSchedule
+	 * @param days
+	 * @param startDate
+	 * @return s: A properly formatted schedule for the user to view
+	 */
 	public static String viewSchedule(Schedule taskSchedule, int days, int startDate){
 		LocalDate sd = datetoLocalDate(startDate);
 		String s = String.format("Schedule from %s to %s (%d days):\n", sd.toString(), sd.plusDays(days-1).toString(), days);
@@ -124,10 +155,23 @@ public class PSS {
 		return s; 
 	}
 
+	/**
+	 * Takes in a date and formats it cleanly for the user
+	 * Used in Schedule for viewTask
+	 * @param date
+	 * @return String formatted to match up with viewSchedule
+	 */
 	public static String formatDate(int date){
 		return String.format("%d-%d-%d",  ((date-date%10000)/10000), (date - (date-date%10000))/100, (date%100));
 	}
 
+	/**
+	 * Checks if the recurring task has the same date as
+	 * given
+	 * @param date
+	 * @param r
+	 * @return
+	 */
 	public static boolean sameDay(LocalDate date, RecurringTask r){
 		LocalDate sd = datetoLocalDate(r.getStartDate());
 		LocalDate ed = datetoLocalDate(r.getEndDate());
@@ -137,18 +181,31 @@ public class PSS {
 		int f = r.getFrequency();
 		return date.toEpochDay()%f == sd.toEpochDay()%f;
 	}
-	
+	/**
+	 * Checks if a Task has the same date as the date given
+	 * @param date
+	 * @param t
+	 * @return boolean if day is same
+	 */
 	public static boolean sameDay(LocalDate date, Task t){
 		if (t instanceof RecurringTask){
 			return sameDay(date, (RecurringTask) t);
 		}
 		return date.compareTo(datetoLocalDate(t.getDate())) == 0;
 	}
-
+	/**
+	 * Creates a local date based on the parameters
+	 * year, month, day
+	 * @param d
+	 * @return LocalDate of d
+	 */
 	public static LocalDate datetoLocalDate(int d){
 		return LocalDate.of((d-d%10000)/10000, (d - (d-d%10000))/100, d%100);
 	}
-
+	/**
+	 * Takes in a Schedule object and organizes tasks based on start time
+	 * @param taskSchedule
+	 */
 	public static void sortSchedule(Schedule taskSchedule){
 		List<Task> sortedTasks = taskSchedule.getTaskList();
 		Collections.sort(sortedTasks, new TaskComparator());
