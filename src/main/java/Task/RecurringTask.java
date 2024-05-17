@@ -5,27 +5,109 @@ public class RecurringTask extends Task{
     int StartDate;
     int Frequency;
 
-    // I think this is how it should look like...
-    public RecurringTask(String name, String type, float startTime, float duration, int date, int startDate, int endDate, int frequency)
-    {
-        super(name, type, startTime, duration, date);
-        StartDate = startDate;
-        EndDate = endDate;
-        Frequency = frequency;
+    public RecurringTask(){
+        EndDate = 20240102;
+        Frequency = 1;
+        StartDate = 20240101;
+
+        TaskTypes = new String[6];
+
+        TaskTypes[0] = "Class";
+        TaskTypes[1] = "Exercise";
+        TaskTypes[2] = "Meal";
+        TaskTypes[3] = "Sleep";
+        TaskTypes[4] = "Study";
+        TaskTypes[5] = "Work";
     }
 
-    public int getEndDate() {
+    public RecurringTask(float duration, int endDate, int frequency, String name, int startDate, float startTime, String type){
+        TaskTypes = new String[6];
+
+        TaskTypes[0] = "Class";
+        TaskTypes[1] = "Exercise";
+        TaskTypes[2] = "Meal";
+        TaskTypes[3] = "Sleep";
+        TaskTypes[4] = "Study";
+        TaskTypes[5] = "Work";
+
+        if (!SetDuration(duration)){
+            SetDuration(0.25f);
+        }
+
+        if (!SetEndDate(endDate)){
+            SetEndDate(20240102);
+        }
+
+        if (!SetFrequency(frequency)){
+            SetFrequency(1);
+        }
+
+        if (!SetName(name)){
+            SetName(name);
+        }
+
+        if (!SetStartDate(startDate)){
+            SetStartDate(20240101);
+        }
+
+        if (!SetStartTime(startTime)){
+            SetStartTime(0.0f);
+        }
+
+        if (!SetType(type)){
+            SetType("Class");
+        }
+    }
+
+    public int GetEndDate(){
         return EndDate;
     }
 
-    public int getStartDate() {
-        return StartDate;
-    }
-
-    public int getFrequency() {
+    public int GetFrequency(){
         return Frequency;
     }
 
+    public int GetStartDate(){
+        return StartDate;
+    }
+
+    public boolean SetFrequency(int frequency){
+        if ((frequency == 1) || (frequency == 7)){
+            Frequency = frequency;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean SetStartDate(int startDate){
+        if (DateValid(startDate)){
+            StartDate = startDate;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean SetEndDate(int endDate){
+        if (DateValid(endDate)){
+            if ((endDate - StartDate) > 0){
+                EndDate = endDate;
+
+                return true;
+            }
+            else{
+                System.out.println("End Date not after Start Date");
+
+                return false;
+            }
+        }
+
+        return false;
+    }
+}
 	public String toString(){
 		return super.toString() + String.format(" (repeats every %d day%s)", getFrequency(), (getFrequency()>1) ? "s" : "");
 	}
