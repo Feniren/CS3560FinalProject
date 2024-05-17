@@ -46,9 +46,8 @@ public class Schedule
      * @return startDate
      */
 
-    // Testing purposes
     public Schedule(){
-        this.timeFrame = "day"; // day, week, month
+        this.timeFrame = "day";
         this.startDate = 20240101;
         this.taskList = new ArrayList<Task>();
     }
