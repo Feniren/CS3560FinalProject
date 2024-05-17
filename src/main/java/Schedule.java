@@ -185,7 +185,7 @@ public class Schedule
         int aCount = 0; // number of anti task overlaps
         int tCount = 0; // number of transient task overlaps
 
-        System.out.println("checking task " + taskToCheck);
+        System.out.println(taskToCheck);
         if (taskToCheck == null) { // checks if task exists
             return false;
         }

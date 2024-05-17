@@ -88,7 +88,7 @@ public class PSS {
 
 		for (Task t : taskSchedule.getTaskList()){
 			JSONObject tJSON = new JSONObject();
-			tJSON.put("Name", t.getName());
+			tJSON.put("Name", t.GetName());
 			tJSON.put("Type", t.GetType());
 			tJSON.put("StartTime", t.GetStartTime());
 			tJSON.put("Duration", t.GetDuration());

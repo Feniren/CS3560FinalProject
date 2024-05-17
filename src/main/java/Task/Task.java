@@ -135,11 +135,16 @@ public class Task
 
   public boolean SetDuration(float duration){
     if ((duration >= 0.25) && (duration <= 23.75)){
-      Duration = RoundFloat(duration);
+      if ((StartTime + duration) <= 24.0f){
+        Duration = RoundFloat(duration);
 
-      System.out.println(Duration);
+        return true;
+      }
+      else{
+        System.out.println("Duration too long for selected start time " + Float.toString(StartTime + duration));
 
-      return true;
+        return false;
+      }
     }
 
     System.out.println("Invalid Duration");

@@ -16,16 +16,16 @@ public class AntiTask extends Task{
             SetDate(20240101);
         }
 
+        if (!SetStartTime(startTime)){
+            SetStartTime(0.0f);
+        }
+
         if (!SetDuration(duration)){
             SetDuration(0.25f);
         }
 
         if (!SetName(name)){
             SetName(name);
-        }
-
-        if (!SetStartTime(startTime)){
-            SetStartTime(0.0f);
         }
 
         if (!SetType(type)){
