@@ -10,6 +10,7 @@ import Task.*;
 public class ScheduleMenu extends MainMenu{
     private MainMenu PreviousWindow;
     private Schedule Schedule;
+    private TextInputMenu TextWindow;
     private JFrame Window;
 
     public ScheduleMenu(MainMenu PreviousWindow, Schedule Schedule){
@@ -38,9 +39,7 @@ public class ScheduleMenu extends MainMenu{
         AddTaskButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                TextInputMenu TextWindow = new TextInputMenu(ScheduleMenu.this);
-
-                TextWindow.SetTitle("Enter Task Name");
+                TaskTypeMenu TaskWindow = new TaskTypeMenu(ScheduleMenu.this);
             }
         });
 
@@ -70,6 +69,16 @@ public class ScheduleMenu extends MainMenu{
         MenuPanel.add(BackButton);
 
         Window.add(MenuPanel, BorderLayout.WEST);
+    }
+
+    public void BindText(TextInputMenu TextInputWindow){
+        TextWindow = TextInputWindow;
+
+        TextWindow.ApplyButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+            }
+        });
     }
 
     @Override

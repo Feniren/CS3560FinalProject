@@ -10,13 +10,13 @@ public class TextInputMenu extends MainMenu{
     private MainMenu PreviousWindow;
     private JFrame Window;
 
-    public TextInputMenu(MainMenu PreviousMenu){
+    public TextInputMenu(MainMenu PreviousWindow){
         Window = new JFrame();
         Window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         Window.setSize(400, 250);
         Window.setLocationRelativeTo(null);
 
-        this.PreviousWindow = PreviousMenu;
+        this.PreviousWindow = PreviousWindow;
 
         ApplyButton = new JButton();
 
@@ -73,6 +73,8 @@ public class TextInputMenu extends MainMenu{
     public void ApplyText(){
         if (!Text.equals("")){
             PreviousWindow.SetText(Text);
+
+            ApplyButton.doClick();
 
             SetVisibility(false);
         }

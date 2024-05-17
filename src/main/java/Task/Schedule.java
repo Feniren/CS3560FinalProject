@@ -11,6 +11,10 @@ public class Schedule
     int startDate; // beginning point of schedule
     List<Task> taskList; // list of all tasks may be sorted who knows,
 
+    public List<Task> GetTaskList(){
+        return taskList;
+    }
+
     public Schedule(String timeFrame, int startDate, List<Task> taskList)
     {
         this.timeFrame = timeFrame;

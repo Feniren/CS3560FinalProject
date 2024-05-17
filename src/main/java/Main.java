@@ -6,7 +6,7 @@ import UserInterface.*;
 
 public class Main {
   public static void main(String[] args) {
-    boolean DisplayJSwingMenu = false;
+    boolean DisplayJSwingMenu = true;
     ArrayList<Schedule> Schedules = new ArrayList<Schedule>();
 
     if (DisplayJSwingMenu){
