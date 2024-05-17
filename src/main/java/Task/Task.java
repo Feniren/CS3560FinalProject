@@ -14,8 +14,8 @@ public class Task
   String[] TaskTypes;
 
   public Task(){
-    Name = "Your mom";
-    Type = "Idk";
+    Name = "";
+    Type = "";
     StartTime = 0.0f;
     Duration = 0.0f;
     Date = 20240101;

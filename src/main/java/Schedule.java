@@ -616,11 +616,10 @@ public class Schedule
                             }
                         }
                     }
-                    mainLoop = false;
                     break;
                 case 9:
-                    System.out.println("Edit Cancelled");
-                    mainLoop = false;
+                    System.out.println("Edit Option Cancelled");
+                    mainLoop = false; // exit loop
                     break;
                 default:
                     System.out.println("Invalid Option");
@@ -663,8 +662,9 @@ public class Schedule
                         }
                         break;
                     case 2:
-                        System.out.println("Edit Option Cancelled");
+                        System.out.println("Editing Complete, Closing Program");
                         mainLoop = false; // exit loop
+                        System.exit(0);
                         break;
                     default:
                         System.out.println("Invalid choice. Please try again.");
