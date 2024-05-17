@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+import java.util.Scanner;
 import Task.Task;
 
 public class Main {
@@ -12,8 +12,52 @@ public class Main {
     // System.out.println(task.SetStartTime(0.1f));
     // System.out.println(task.SetDuration(24.999999f));
 
-    ArrayList<Task> tasks = new ArrayList<Task>();
-    Schedule testSchedule = new Schedule("day", 20240101, tasks);
+    int userInput = 0;
+    String userStringInput = "";
+    Schedule testSchedule;
+    Scanner input = new Scanner(System.in);
+
+     System.out.println("Would you like to create a new schedule or insert a json file of your own schedule? \nEnter an int value corresponding to your choice");
+     System.out.println("1) Create new schedule");
+     System.out.println("2) Insert json file");
+     System.out.println("3) Exit program");
+     System.out.println();
+     int userIntInput = input.nextInt();
+     while(userIntInput != 1 || userIntInput != 2 || userIntInput != 3) {
+          switch(userIntInput) {
+               case 1:
+                    ArrayList<Task> tasks = new ArrayList<Task>();
+                    testSchedule = new Schedule("day", 20240101, tasks);
+                    break;
+               case 2:
+                    System.out.println("Type out the path string for the json file you wish to use.");
+                    userStringInput = input.nextLine();
+                    testSchedule = PSS.readFromFile(userStringInput);
+                    // go to pss
+                    break;
+               case 3:
+                    input.close();
+                    System.exit(0);
+               default:
+                    System.out.println("Please enter a number corresponding to the available options.");
+          }
+     }
+     userIntInput = 0;
+     userStringInput = "";
+     while(userIntInput != 8) {
+          System.out.println("Please choose an option listed below");
+          System.out.println("1) Add task to schedule");
+          System.out.println("2) Edit task in schedule");
+          System.out.println("3) Remove task in schedule");
+          System.out.println("4) ");
+          switch(userIntInput) {
+               case 1:
+
+               case 2:
+          }
+     }
+     
+
 
     //testSchedule.createTask("recTask1", "Class", 1.25f, 3.5f, 20240501, 20240528, 7); // recurrent task
     testSchedule.createTask("recTask2", "Class", 1.25f, 3.5f, 20240501, 20240526, 7); // recurrent task
@@ -28,6 +72,7 @@ public class Main {
     // testSchedule.createTask("RecTask5", "Class", 1.25f, 3.55f, 20240709, 20240825, 7); // inputted as a editTask setup
 
     testSchedule.printList();
+    input.close();
 
     // testSchedule.editTaskMenu();
 

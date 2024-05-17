@@ -40,6 +40,22 @@ public class Schedule
         }
     }
 
+    public String getTimeFrame(){
+        return this.timeFrame;
+    }
+
+    public int getStartDate(){
+        return this.startDate;
+    }
+
+    public List<Task> getTaskList(){
+        return this.taskList;
+    }
+
+    public List<Task> setTaskList(List<Task> newTaskList){
+        return this.taskList = newTaskList;
+    }
+
     /**
      * searches the list for a task of a given name
      * @param Name Task name to be searched
@@ -56,6 +72,7 @@ public class Schedule
 
     /**
      * For the case of a Weekly Frequency Task
+     * @param RecTask a recurrent task to be examined for dates it occurs
      * @return an arraylist of integer values corresponding to valid dates of a given recurring task
      */
     public ArrayList<Integer> weeklyDates(RecurringTask RecTask) {
@@ -140,10 +157,6 @@ public class Schedule
         return validDates;
     }
 
-    // current idea is to have it take a task name and have it check the list for all other task times
-    // may encounter issues
-    // Should try to simplify this in the future
-
     /**
      * Checks a new task's time and date to see if it overlaps with any current tasks
      * @param name Name of task to be checked
@@ -168,12 +181,11 @@ public class Schedule
                         // System.out.println("Same task name, no overlap");
                         continue; // Same Task, no overlap
                     } //this feels weird but is needed
-                    // Trans vs Recurring
+                    // Trans vs Recurring, wont be overlap if there are enough antitasks
                     if (categorizeTask(task.GetType()).equals("recurring")) {
                         RecurringTask recurringTask = (RecurringTask) task;
                         if (checkRecurringOverlap(checkTTask, recurringTask)) {
-                            //flag = true;
-                            System.out.println("overlap detected, checkRecurringOverlap");
+                            System.out.println("Potential overlap detected, checkRecurringOverlap");
                             rCount++;
                             continue;
                         }
@@ -181,7 +193,6 @@ public class Schedule
                     } else if (categorizeTask(task.GetType()).equals("anti")) {
                         AntiTask antiTask = (AntiTask) task;
                         if (checkAntiOverlap(antiTask, checkTTask)) {
-                            //flag = true;
                             aCount++;
                             continue;
                         }
@@ -195,13 +206,14 @@ public class Schedule
                         }
                     }
                 }
+                // if there's more recurring tasks than antis then there is overlap
                 if(rCount > aCount) {
                     flag = true;
                 } 
                 break;
             case "recurring":
                 RecurringTask checkRTask = (RecurringTask) taskToCheck;
-                //System.out.println(checkRTask.GetType());
+                // arraylists to keep track of which days are in conflict
                 ArrayList<Integer> transDates = new ArrayList<Integer>();
                 ArrayList<Integer> antiDates = new ArrayList<Integer>();
                 ArrayList<Integer> recDates = new ArrayList<Integer>();
@@ -213,7 +225,6 @@ public class Schedule
                     if(categorizeTask(task.GetType()).equals("transient")) {
                         TransientTask transientTask = (TransientTask) task;
                         if(checkRecurringOverlap(transientTask, checkRTask)) {
-                            //flag = true;
                             transDates.add(transientTask.GetDate());
                             continue;
                         }
@@ -221,7 +232,6 @@ public class Schedule
                     } else if(categorizeTask(task.GetType()).equals("anti")) {
                         AntiTask antiTask = (AntiTask) task;
                         if (checkAntiRecurringOverlap(antiTask, checkRTask)) {
-                            //flag = true;
                             antiDates.add(antiTask.GetDate());
                             continue;
                         }
@@ -229,7 +239,6 @@ public class Schedule
                         System.out.println("Two Recurrence, same date");
                         RecurringTask recurringTask = (RecurringTask) task;
                         if (checkRectoRecOverlap(checkRTask, recurringTask)) {
-                            //flag = true;
                             for(Integer i : weeklyDates(checkRTask)) {
                                 for (Integer j : weeklyDates(checkRTask)) {
                                     if (i == j) {
@@ -277,7 +286,6 @@ public class Schedule
                     if(categorizeTask(task.GetType()).equals("transient")) {
                         TransientTask transientTask = (TransientTask) task;
                         if(checkAntiOverlap(checkATask, transientTask)) {
-                            //flag = true;
                             tCount++;
                             continue;
                         }
@@ -285,21 +293,15 @@ public class Schedule
                     } else if(categorizeTask(task.GetType()).equals("recurring")) {
                         RecurringTask recurringTask = (RecurringTask) task;
                         if(checkAntiRecurringOverlap(checkATask, recurringTask)) {
-                            //flag = false; //we want overlap with recurring
+                            //we want overlap with recurring
                             rCount++;
                             continue;
                         } 
-                        // else {
-                        //     flag = true;
-                        //     continue;
-                        // }
-
                         // anti vs anti
                     } else if(task.GetDate() == checkATask.GetDate()) {
                         System.out.println("Two anti, same date");
                         AntiTask antiTask = (AntiTask) task;
                         if (checkAntiToAntiOverlap(checkATask, antiTask)) {
-                            //flag = true;
                             aCount++;
                         }
                         continue;
@@ -307,15 +309,10 @@ public class Schedule
                         continue;
                     }
                 }
-                // System.out.println("completed check");
                 // this may be bugged need to test
                 if(rCount == aCount+1 && tCount == 0) { //must have 1 recurrent task underneath case for 
                     flag = false;
-                } 
-                // may delete later
-                //else if(rCount == aCount+1 && tCount == 1) {
-                //flag = false;
-                else { // 1 transient exists or too many anti tasks etc.
+                } else { // 1 transient exists or too many anti tasks etc.
                     flag = true;
                 }
                 break;
@@ -459,7 +456,6 @@ public class Schedule
             return false;
         }
     }
-
 
     /**
      * prints out task info
