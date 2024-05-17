@@ -14,6 +14,7 @@ public class Main {
 
     int userInput = 0;
     String userStringInput = "";
+    String jsonPath = "";
     Schedule testSchedule;
     Scanner input = new Scanner(System.in);
 
@@ -23,7 +24,7 @@ public class Main {
      System.out.println("3) Exit program");
      System.out.println();
      int userIntInput = input.nextInt();
-     while(userIntInput != 1 || userIntInput != 2 || userIntInput != 3) {
+     while(userIntInput != 3) {
           switch(userIntInput) {
                case 1:
                     ArrayList<Task> tasks = new ArrayList<Task>();
@@ -31,8 +32,8 @@ public class Main {
                     break;
                case 2:
                     System.out.println("Type out the path string for the json file you wish to use.");
-                    userStringInput = input.nextLine();
-                    testSchedule = PSS.readFromFile(userStringInput);
+                    jsonPath = input.nextLine();
+                    testSchedule = PSS.readFromFile(jsonPath);
                     // go to pss
                     break;
                case 3:
@@ -44,17 +45,92 @@ public class Main {
      }
      userIntInput = 0;
      userStringInput = "";
-     while(userIntInput != 8) {
+     
+     while(userIntInput != 7) {
+          String name = "";
           System.out.println("Please choose an option listed below");
           System.out.println("1) Add task to schedule");
           System.out.println("2) Edit task in schedule");
           System.out.println("3) Remove task in schedule");
-          System.out.println("4) ");
+          System.out.println("4) View Schedule");
+          System.out.println("5) View Task");
+          System.out.println("6) Switch Schedule");
+          System.out.println("7) Exit program");
+          userIntInput = input.nextInt();
           switch(userIntInput) {
                case 1:
+                    System.out.println("What task type would you like to add?");
+                    System.out.println("1) Transient Task");
+                    System.out.println("2) Recurrent Task");
+                    System.out.println("3) Anti-Task");
+                    String classType = "";
+                    float startTime = 0.0f;
+                    float duration = 0.0f;
+                    int date = 0;
+                    int endDate = 0;
+                    int frequency = 1;
+                    userIntInput = input.nextInt();
+                    switch(userIntInput) {
+                         case 1: case 2:
+                              System.out.println("Enter a name for your task");
+                              name = input.nextLine();
+                              System.out.println("Enter a class type");
+                              classType = input.nextLine();
+                              System.out.println("Enter a start time for your task");
+                              startTime = input.nextFloat();
+                              System.out.println("Enter a duration for your task");
+                              duration = input.nextFloat();
+                              System.out.println("Enter a date for your task, formatted as YYYYMMDD");
+                              date = input.nextInt();
+                              
+
+                              testSchedule.createTask(name, classType, startTime, duration, date);
+                              break;
+                         case 3:
+                              System.out.println("Enter a name for your task");
+                              name = input.nextLine();
+                              System.out.println("Enter a class type");
+                              classType = input.nextLine();
+                              System.out.println("Enter a start time for your task");
+                              startTime = input.nextFloat();
+                              System.out.println("Enter a duration for your task");
+                              duration = input.nextFloat();
+                              System.out.println("Enter a start date for your task, formatted as YYYYMMDD");
+                              date = input.nextInt();
+                              System.out.println("Enter an end date for your task, formatted as YYYYMMDD");
+                              endDate = input.nextInt();
+                              System.out.println("Enter a frequency for your task, 1 being daily and 7 being weekly");
+                              frequency = input.nextInt();
+
+                              testSchedule.createTask(name, classType, startTime, duration, date, endDate, frequency);
+                              break;
+                         default:
+                              System.out.println("Invalid input returning to menu."); 
+                      
+                    }
 
                case 2:
+                    testSchedule.editTaskMenu();
+
+               case 3:
+                    System.out.println("Enter a task name to delete");
+                    name = input.nextLine();
+                    testSchedule.DeleteTask(name);
+               case 4:
+                    
+                    System.out.println
+               case 5:
+
+               default:
+                    System.out.println("Please choose an option listed below");
+                    System.out.println("1) Add task to schedule");
+                    System.out.println("2) Edit task in schedule");
+                    System.out.println("3) Remove task in schedule");
+                    System.out.println("4) Switch schedule");
+                    System.out.println("5) Exit program");
           }
+          userIntInput = 0;
+          userStringInput = "";
      }
      
 
