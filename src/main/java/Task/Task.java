@@ -12,8 +12,8 @@ public class Task{
   String[] TaskTypes;
 
   public Task(){
-    Name = "Your mom";
-    Type = "Idk";
+    Name = "";
+    Type = "";
     StartTime = 0.0f;
     Duration = 0.0f;
     Date = 20240101;
@@ -118,11 +118,16 @@ public class Task{
 
   public boolean SetDuration(float duration){
     if ((duration >= 0.25) && (duration <= 23.75)){
-      Duration = RoundFloat(duration);
+      if ((StartTime + duration) <= 24.0f){
+        Duration = RoundFloat(duration);
 
-      System.out.println(Duration);
+        return true;
+      }
+      else{
+        System.out.println("Duration too long for selected start time " + Float.toString(StartTime + duration));
 
-      return true;
+        return false;
+      }
     }
 
     System.out.println("Invalid Duration");
@@ -137,7 +142,7 @@ public class Task{
   }
 
   public boolean SetStartTime(float startTime){
-    if ((startTime >= 0) && (startTime <= 23.75)){
+    if ((startTime >= 0.0f) && (startTime <= 23.75f)){
       StartTime = RoundFloat(startTime);
 
       return true;
