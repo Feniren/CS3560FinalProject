@@ -45,17 +45,20 @@ public class Main {
      }
      userIntInput = 0;
      userStringInput = "";
+     System.out.println("Type out the json path you would like to save to");
+     jsonPath = input.nextLine();
      
      while(userIntInput != 7) {
           String name = "";
+
           System.out.println("Please choose an option listed below");
           System.out.println("1) Add task to schedule");
           System.out.println("2) Edit task in schedule");
           System.out.println("3) Remove task in schedule");
           System.out.println("4) View Schedule");
           System.out.println("5) View Task");
-          System.out.println("6) Switch Schedule");
-          System.out.println("7) Exit program");
+          //System.out.println("6) Switch Schedule");
+          System.out.println("6) Exit program");
           userIntInput = input.nextInt();
           switch(userIntInput) {
                case 1:
@@ -105,22 +108,48 @@ public class Main {
                               testSchedule.createTask(name, classType, startTime, duration, date, endDate, frequency);
                               break;
                          default:
-                              System.out.println("Invalid input returning to menu."); 
-                      
+                              System.out.println("Invalid input returning to menu.");  
                     }
-
+                    PSS.writeToFile(jsonPath, testSchedule);
+                    break;
                case 2:
                     testSchedule.editTaskMenu();
-
+                    PSS.writeToFile(jsonPath, testSchedule);
+                    break;
                case 3:
                     System.out.println("Enter a task name to delete");
                     name = input.nextLine();
                     testSchedule.DeleteTask(name);
+                    PSS.writeToFile(jsonPath, testSchedule);
+                    break;
                case 4:
-                    
-                    System.out.println
+                    System.out.println("What duration of time would you like to view?");
+                    System.out.println("1) Day");
+                    System.out.println("2) Week");
+                    System.out.println("3) Month");
+                    int frame = input.nextInt();
+                    System.out.println("What date would you like to start from?");
+                    int givenDate = input.nextInt();
+                    switch(frame) {
+                         case 1:
+                              PSS.viewSchedule(testSchedule, 1, givenDate);
+                         case 2:
+                              PSS.viewSchedule(testSchedule, 7, givenDate);
+                         case 3:
+                              PSS.viewSchedule(testSchedule, 30, givenDate);
+                         default:
+                              System.out.println("Invalid duration given.");
+                    }
+                    break;
                case 5:
-
+                    System.out.println("Enter a task name to view");
+                    name = input.nextLine();
+                    testSchedule.viewTask(name);
+                    break;
+               case 6:
+                    input.close();
+                    System.exit(0); 
+                    break;
                default:
                     System.out.println("Please choose an option listed below");
                     System.out.println("1) Add task to schedule");
